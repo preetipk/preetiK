@@ -1,0 +1,37 @@
+<html ng-app="myApp">
+    <head>
+            <script src="angular-1.7.3/angular.min.js"></script>
+    </head>
+    <body>
+            <div ng-controller="onclick">
+                    <h1>{{::model.title}}</h1>
+                    <div>
+                            <label><input type="radio" name="category" ng-click="changeMainDish('Cheese Pizza')"/>change pizza</label>
+                    </div>
+                    <div>
+                            <label><input type="radio" name="category" ng-click="changeMainDish('Pepperoni Pizza')"/>Pepperoni Pizza</label>
+                    </div>
+
+                    <div>
+                                <label><input type="radio" name="category" ng-click="changeMainDish('Margherita Pizza')"/>Margherita Pizza</label>
+                    </div>
+
+                    <div>
+                                <label><input type="radio" name="category" ng-click="changeMainDish('BBQ Chicken Pizza')"/>BBQ Chicken Pizza</label>
+                    </div>
+
+                    <div>
+                                <label><input type="radio" name="category" ng-click="changeMainDish('Combo Pizza')"/>Combo Pizza</label>
+                     </div>
+
+                     <div>
+                                <h3>Selected Item</h3>
+                                <p> {{model.mainDish}}</p>
+                            </div>
+
+                    <!-- <a href='#' ng-click='rename("Away")'>Click This to Change</a> -->
+                    </div>
+                    <script src="onclicModel.js"></script>
+                    <script src="onclickControllere.js"></script>
+    </body>
+</html>
