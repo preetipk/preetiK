@@ -1,17 +1,17 @@
 <html>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<body>
+    <head>
+            <script src="angular-1.7.3/angular.min.js"></script>
+            <script src="module.js"></script>
+            <script src="controller.js"></script>
+    </head>
 
-<div ng-app="myApp" ng-controller="myCtrl">
+<body ng-app="myApp">
+
+<div  ng-controller="myCtrl">
     <h1>{{helloWorld}}</h1>
 </div>
 
-<script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope) {
-    $scope.helloWorld = "Hello World";    
-});
-</script>
+
 
 
 
