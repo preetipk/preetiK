@@ -1,12 +1,23 @@
 <html ng-app="myapp">
     <head>
             <script src="angular-1.7.3/angular.min.js"></script>
-            <script src="app.js"></script>
-            <script src="controller1.js"></script>
+            
     </head>
     <body>
        <div ng-controller="personalInfo">
-          {{ personalInformation }}
+          Name       :{{ personalInformation.name }}
+          DateOfBirth:{{ personalInformation.dateOfBirth }}
+          location  :{{ personalInformation.location }}
        </div>
+
+       <div ng-controller="patriot">
+            1:{{ patriotNames.first }}
+            2:{{ patriotNames.second }}
+            3:{{ patriotNames.third }}
+         </div>
+
+       <script src="app.js"></script>
+      <script src="controller1.js"></script>
+      <script src="controller2.js"></script>
     </body>
 </html>
