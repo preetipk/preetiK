@@ -1,0 +1,32 @@
+<html ng-app="myapp">
+    <head>
+            <script src="angular-1.7.3/angular.min.js"></script>
+    </head>
+    <body>
+        <div ng-controller = "myController">
+           <input type = "checkbox" ng-model = "hideContact"/>show contactNo
+           <br/>
+           <table border="1">
+               <thead>
+                    <tr>
+                         <th>Name</th>
+                         <th ng-hide="hideContact">contactNo</th>
+                         <th ng-show="hideContact">###</th>
+                   </tr>
+               </thead>
+
+               <tbody>
+                   <tr ng-repeat="employee in employees">
+                       <td>{{employee.name}}</td>
+                       <td ng-hide="hideContact">{{employee.contact}}</td>
+                       <td ng-show="hideContact">####</td>
+                   </tr>
+               </tbody>
+               
+           </table>
+        </div>
+
+        <script src="aDirectivesModel.js"></script>
+        <script src="aDirectivesController.js"></script>
+    </body>
+</html>

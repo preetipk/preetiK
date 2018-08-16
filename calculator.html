@@ -1,0 +1,32 @@
+<html ng-app="myApp">
+    <head>
+            <script src="angular-1.7.3/angular.min.js"></script>
+    </head>
+    <body>
+        <div ng-controller = "myController">
+                <form>
+                        First Number: <input type="number" ng-model="firstnumber"><br/><br/>
+
+                        Operation <select ng-model="operator">
+                                
+                                <option value="add">Addition</option>
+                                <option value="subtract">Subtraction</option>
+                                <option value="multiply">Multiplication</option>
+                                <option value="divide">Division</option>
+                              </select><br/><br/>
+                        Second Number: <input type="number" ng-model="secondnumber"><br/>
+                        
+                        submit<input type="submit" ng-click=" result()"/><br/>
+                        {{output}}
+                        
+                        
+
+                      </form>
+        </div>
+
+        <script src="calculatorModel.js"></script>
+        <script src="calculatorController.js"></script>
+    </body>
+</html>
+
+
