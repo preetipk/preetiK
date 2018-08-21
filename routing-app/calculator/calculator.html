@@ -1,6 +1,7 @@
 <div>
-    <form>
+    <form name="myForm">
             First Number: <input type="text" ng-model="firstnumber" ng-bind="firstnumber"><br/><br/>
+            <span ng-show="myForm.firstnumber.$touched && myForm.firstnumber.$invalid">Number is required.</span>
 
             Operation <select ng-model="operator">
                     
@@ -10,6 +11,7 @@
                     <option value="divide">Division</option>
                   </select><br/><br/>
             Second Number: <input type="text" ng-model="secondnumber" ng-bind="secondnumber"><br/>
+            <span ng-show="myForm.secondnumber.$touched && myForm.secondnumber.$invalid">Number is required.</span>
             
             submit<input type="submit" ng-click=" result()"/><br/>
             {{output}}

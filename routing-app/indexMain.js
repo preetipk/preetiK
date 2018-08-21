@@ -18,4 +18,9 @@ app.config(function ($routeProvider) {
         templateUrl: 'calculator/calculator.html',
         controller: 'calculatorController'
     })
+    .when('/post', {
+        templateUrl: 'angularPromises/post.html',
+        controller: 'postController'
+    })
+    
 });

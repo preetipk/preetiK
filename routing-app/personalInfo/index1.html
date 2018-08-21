@@ -1,9 +1,16 @@
 
     
        <div>
-          Name       :{{ personalInformation.name }}
-          DateOfBirth:{{ personalInformation.dateOfBirth }}
-          location  :{{ personalInformation.location }}
+          <p> Name       : {{ personalInformation.name | uppercase }}</p>
+          <p>DateOfBirth : {{ personalInformation.dateOfBirth }}</p>
+          <p>location    : {{ personalInformation.location }}</p>
+          <p><input type="text" ng-model="letter"/></p>
+          <div ng-repeat = "subject in personalInformation.subjects | filter : letter ">
+              <p>
+                  subjects   : {{ subject }}
+                </p>
+          </div>
+          
        </div>
 
        
