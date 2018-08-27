@@ -1,0 +1,22 @@
+<table border="1" ng-init="get()" ng-show="displayTable">
+  <tr>
+    <th>Id</th>
+    <th>FirstName</th>
+    <th>LastName</th>
+    <th>Avatar</th>
+    <th colspan="3">Action</th>
+  </tr>
+  <tr ng-repeat = "user in users"> 
+    <td>{{user.id}}</td>
+    <td>{{user.first_name}}</td>
+    <td>{{user.last_name}}</td>
+    <td>{{user.avatar}}</td>
+    <td><a href = "#!user/{{user.id}}">View</a></td>
+    <td><a href = "#!user/{{user.id}}/update">Update</a></td>
+    <td><a href ng-click="delete(key)">Delete</a></td>
+
+  </tr>
+</table>
+
+
+
