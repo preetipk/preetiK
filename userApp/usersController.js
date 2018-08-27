@@ -18,28 +18,14 @@ app.controller("usersController",['$scope','$http','userService', function($scop
       })
     }
 
-    $scope.delete = function(index) {  
-      var retval = userService.deleteUser(user.Id)
-      .success(function(msg) {  
-          $scope.user.splice(index, 1);  
-          alert('User has been deleted successfully.');  
-      })
-      .error(function() {  
-          alert('Oops! something went wrong.');  
-      });  
-
-   }
-
-   $scope.delete= function(id) {
+    
+   $scope.delete = function(value) {
     if (confirm('Are you sure you want to delete this?')) {
-    $http.delete("users.html"+id)
-    .then(function(response){
-    console.log(response);
-    });
-    }
+      $scope.index = $scope.users.indexOf($scope.users[value]);
+      $scope.users.splice($scope.index, 1); 
     
     }
-  
+  }
     
   }]);
  
