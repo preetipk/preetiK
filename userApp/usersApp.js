@@ -1,4 +1,4 @@
-var app =angular.module('usersApp', ['ngRoute'])
+var app =angular.module('usersApp', ['ngRoute','ngAnimate', 'ngSanitize', 'ui.bootstrap'])
 app.config(function ($routeProvider) {
     $routeProvider
     
@@ -18,6 +18,10 @@ app.config(function ($routeProvider) {
     .when('/user/:id/update', {
         templateUrl: 'updateUser.html',
         controller: 'userController'
+    })
+    .when('/students', {
+        templateUrl: 'studentInfo/students.html',
+        controller: 'studentsCtrl'
     })
     
 });

@@ -5,6 +5,9 @@
     <th>LastName</th>
     <th>Avatar</th>
     <th colspan="3">Action</th>
+    
+      
+    </th>
   </tr>
   <tr ng-repeat = "user in users"> 
     <td>{{user.id}}</td>
@@ -14,7 +17,6 @@
     <td><a href = "#!user/{{user.id}}">View</a></td>
     <td><a href = "#!user/{{user.id}}/update">Update</a></td>
     <td><a href ng-click="delete(key)">Delete</a></td>
-
   </tr>
 </table>
 

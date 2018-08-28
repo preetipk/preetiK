@@ -10,7 +10,9 @@ app.service("userService",["$http",function($http){
     this.updateUser = function(id,data){
         return $http.post("https://reqres.in/api/users/"+id,data);
     }
-    
+    this.deleteUser = function(id){
+        return $http.delete("https://reqres.in/api/users/"+id);
+    }
  }]);
 
 

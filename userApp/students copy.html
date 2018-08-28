@@ -1,0 +1,36 @@
+<div>
+<table st-table="studentInfo" class="table table-striped" border="1">
+	<thead>
+	<tr>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Birth Date</th>
+		<th>Class</th>
+		<th>Action</th>
+	</tr>
+	</thead>
+	<tbody>
+            
+	<tr ng-repeat="student in studentInfo">
+		<td>{{student.firstName}}</td>
+		<td>{{student.lastName}}</td>
+		<td>{{student.birthDate}}</td>
+		<td>{{student.class}}</td>
+	
+    </tr>
+    </div>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="open()">Open Modal</button>
+	</tbody>
+</table>
+
+<script type="text/ng-template" id="myModal.html">
+    <div class="modal-header">
+        
+    </div>
+    <div class="modal-body" id="modal-body">
+        hello world
+        
+    </div>
+   
+</script>
+</div>
