@@ -1,4 +1,4 @@
-var app =angular.module('usersApp', ['ngRoute','ngAnimate', 'ngSanitize', 'ui.bootstrap'])
+var app =angular.module('usersApp', ['ngRoute','ui.bootstrap'])
 app.config(function ($routeProvider) {
     $routeProvider
     
@@ -20,7 +20,7 @@ app.config(function ($routeProvider) {
         controller: 'userController'
     })
     .when('/students', {
-        templateUrl: 'studentInfo/students.html',
+        templateUrl: 'students.html',
         controller: 'studentsCtrl'
     })
     

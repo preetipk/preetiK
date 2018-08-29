@@ -13,6 +13,9 @@ app.service("userService",["$http",function($http){
     this.deleteUser = function(id){
         return $http.delete("https://reqres.in/api/users/"+id);
     }
+      
+
+
  }]);
 
 
