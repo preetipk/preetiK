@@ -1,0 +1,18 @@
+<html ng-app="myApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="myApp.js"></script>
+        <script src="preetiCntroller.js"></script>
+        <script src="preetiService.js"></script>
+    </head>
+    <body ng-controller="ctrl">
+        <label>First name</label>
+        <input type="text" name="fName" ng-model="fName"/>
+        <label>Last name</label>
+        <input type="text" name="fName" ng-model="lName"/>
+        <input type="submit" ng-click="submit()" ng-model="submit">
+
+
+        {{displayData}}
+    </body>
+</html>
