@@ -1,0 +1,24 @@
+{
+    "courses":[
+        
+        {
+            "id" : 1,
+            "name" : "node"
+        },
+    
+        
+        {
+            "id" : 2,
+            "name" : "angular"
+        },
+    
+    
+        {
+            "id" : 3,
+            "name" : "express"
+        }
+
+]
+   
+}
+    
