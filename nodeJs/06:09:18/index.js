@@ -16,37 +16,45 @@ app.use(express.json());
 //     { id: 3, name: 'Mongo'}
 // ]
 
-app.get('/',(req,res) => {
-    res.send('Hello world');
-});
+
 
 app.get('/api/courses', (req,res) => {
-    res.send(data);
+    try {
+        // Is it a directory?
+        if (fs.existsSync('/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json')) {
+            console.log("file is exist");
+            res.send(data);
+        }else{
+            console.log("file not exist");
+        }
+    }
+    catch (e) {
+       console.log("some other error");
+    }
+    
+    
 });
 
-app.get('/api/courses/:id', (req,res) => {
-
-    //to search the id inbuilt function find 
-    const course = data.courses.find(c => c.id == parseInt(req.params.id));
+// app.get('/api/courses/:id', (req,res) => {
+//  //to search the id inbuilt function find 
+//     const course = data.courses.find(c => c.id == parseInt(req.params.id));
     
-    //if the resourse not found send msg
-    if(!course) res.status(404).send('course not found')
-    //if course found return it to client
-    res.send(course);
-})
+//     //if the resourse not found send msg
+//     if(!course) res.status(404).send('course not found')
+//     //if course found return it to client
+//     res.send(course);
+// })
 
 app.post('/api/courses', (req,res) => {
     console.log("calling post")
     
-
     //validation for post data if validations are manualy..........
     if(!req.body.name || req.body.name.length < 3){
         res.status(400).send('name is required min 3 characters');
         return;
     }
 
-
-    //assignig id and name of course
+   // assignig id and name of course
     var course = {
         id: req.body.id,
         name: req.body.name
@@ -54,56 +62,127 @@ app.post('/api/courses', (req,res) => {
     data.courses.push(course);
     console.log(course);
 
-    fs.writeFile('courses.json',JSON.stringify(data), function (err) {
-        if (err) throw err;
-        console.log(course);
-      });
 
-    res.send(course);
-});
 
-app.put('/api/courses/:id', (req, res) => {
-    //look if course is exist or not
-    //If not exist give status as 404
-    console.log("put request");
-    const courseId = data.courses.find(c => c.id === parseInt(req.params.id));
-    //console.log(courseId);
-    if(!courseId) {
-        res.status(404).send('course not found');
-        return;
+
+    try {
+        // Is it a directory?
+        if (fs.existsSync('/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json')) {
+            console.log("file is exist");
+                fs.writeFile('courses.json',JSON.stringify(data), function (err) {
+                if (err) throw err;
+                console.log(course);
+          });
+        }else{
+            console.log("file not exist");
+            fs.writeFile('courses.json',JSON.stringify(data), function (err) {
+                console.log('sdfgdsf')
+                console.log("file is created");
+                console.log(err);
+                if (err) throw err;
+                console.log(course);
+          });
+        }
     }
-    course={
-        id:courseId.id,
-        name:req.body.name
+    catch (e) {
+       console.log("some other error");
     }
-     fs.writeFile('courses.json',JSON.stringify(course), function (err) {
-        if (err) throw err;
-        console.log(course.name);
-      });
-   // now update the course
-   
-    //send it
-    res.send(course);
-});
-
-app.delete('/api/courses/:id', (req,res) => {
-    //look if the course is exist or not
-    const course = data.courses.find(c => c.id === parseInt(req.params.id));
-    if(!course) {
-        res.status(404).send('course not found');
-        return;
-    }
-    //to delete the object
-    const index = data.courses.indexOf(course);
-    data.courses.splice(index,1);
 
 
-    fs.writeFile('courses.json',JSON.stringify(data), function (err) {
-        if (err) throw err;
-        console.log(course.name);
-      });
+
+
+
+
+
+    // try {
+    //     // Query the entry
+    //     stats = fs.lstatSync('/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json');
     
-    res.send(course);
+    //     // Is it a directory?
+    //     if (stats.isExist()) {
+    //         console.log("file is exist");
+    //     //     fs.writeFile('courses.json',JSON.stringify(data), function (err) {
+    //     //         if (err) throw err;
+    //     //         console.log(course);
+    //     //   });
+    //     }else{
+    //         console.log("file not exist")
+    //         // fs.openSync('courses.json', 'w', function (err, file) {
+    //         //     if (err) throw err;
+    //         //     console.log("file is created");
+    //         //     console.log('Data Saved!');
+    //         //   });
+    //     }
+    // }
+    // catch (e) {
+    //     console.log("some other error")
+    // }
+
+
+
+
+
+    //res.send(course);
 });
 
-app.listen(3002,() => console.log('Listening on port 3002'));
+// app.put('/api/courses/:id', (req, res) => {
+//     //look if course is exist or not
+//     //If not exist give status as 404
+//     console.log("put request");
+//     const course = data.courses.find(c => c.id === parseInt(req.params.id));
+//     //console.log(courseId);
+//     if(!course) {
+//         res.status(404).send('course not found');
+//         return;
+//     }
+      
+//        course.id = req.body.id;
+//        course.name = req.body.name;
+
+//        console.log("id="+course.id);
+//        console.log("name="+course.name);
+    
+//        res.send(data);
+//        var newData = JSON.stringify(data);
+//        fs.writeFile('courses.json', newData);
+//        res.end( JSON.stringify(data));
+     
+   
+//     //send it
+//     res.send(course);
+// });
+
+// app.delete('/api/courses/:id', (req,res) => {
+//     //look if the course is exist or not
+//     const course = data.courses.find(c => c.id === parseInt(req.params.id));
+//     if(!course) {
+//         res.status(404).send('course not found');
+//         return;
+//     }
+//     //to delete the object
+//     const index = data.courses.indexOf(course);
+//     data.courses.splice(index,1);
+
+
+//     if (fs.existsSync('./courses.json')) {
+//         console.log("file is exist");
+//         fs.writeFile('courses.json',JSON.stringify(data), function (err) {
+//             if (err) throw err;
+//             console.log(course.name);
+//           });
+//     }
+    
+    
+//     res.send(course);
+// });
+// fs.unlink('courses.json', function (err) {
+//     if (err) throw err;
+//     console.log('File deleted!');
+//   });
+
+app.listen(3004,() => console.log('Listening on port 3002'));
+
+
+
+
+
