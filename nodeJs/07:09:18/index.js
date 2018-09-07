@@ -1,13 +1,28 @@
 const joi = require('joi');
 const express = require('express');
+//querystring = require('querystring'); 
 var fs = require('fs');
 const app = express();
+var data1 = require('./courses');
 
 
 //const data = require('./courses')
 
 //adding a middleware to use json object
 app.use(express.json());
+
+app.get("/api/courses/:id",function(req,res){
+    var id = req.query.id;
+    console.log("query string id="+id)
+    console.log(JSON.stringify(req.query));
+    res.send('id',{id:req.query});
+});
+
+// app.get('api/courses/name', function(req, res) {
+//     console.log("req.query.name");  
+//     res.send(data.getCourses(req.query.name)); 
+    
+//   });
 
 app.get('/api/courses', (req,res) => {
     try {
@@ -31,15 +46,16 @@ app.get('/api/courses', (req,res) => {
     
 });
 
-// app.get('/api/courses/:id', (req,res) => {
-//  //to search the id inbuilt function find 
-//     const course = data.courses.find(c => c.id == parseInt(req.params.id));
+app.get('/api/courses/:id', (req,res) => {
+ //to search the id inbuilt function find 
     
-//     //if the resourse not found send msg
-//     if(!course) res.status(404).send('course not found')
-//     //if course found return it to client
-//     res.send(course);
-// })
+    const course = data1.courses.find(c => c.id == parseInt(req.query.id));
+    
+    //if the resourse not found send msg
+    if(!course) res.status(404).send('course not found')
+    //if course found return it to client
+    res.send(course);
+})
 
 app.post('/api/courses', (req,res) => {
     console.log("calling post")
@@ -86,7 +102,7 @@ app.put('api/courses/:id', function(req, res)  {
           console.log('File exists....');
             fs.readFile("/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json", function (err, data) {
             data = JSON.parse( data );
-            const user = data.courses.find(c => c.id === parseInt(req.params.id));
+            const user = data.courses.find(c => c.id === parseInt(req.query.id));
            
             if(!course) {
                 res.status(404).send('course not found');
@@ -148,7 +164,7 @@ app.put('api/courses/:id', function(req, res)  {
 
 
 
-app.listen(3004,() => console.log('Listening on port 3002'));
+app.listen(3010,() => console.log('Listening on port 3009'));
 
 
 
