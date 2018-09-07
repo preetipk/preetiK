@@ -84,25 +84,22 @@ app.put('api/courses/:id', function(req, res)  {
       fs.exists('courses.json', function(exists) {
           if(exists) {
           console.log('File exists....');
-            fs.readFile( __dirname + "/" + "courses.json", function (err, data) {
+            fs.readFile("/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json", function (err, data) {
             data = JSON.parse( data );
-            const user = data.users.find(c => c.id === parseInt(req.params.id));
+            const user = data.courses.find(c => c.id === parseInt(req.params.id));
            
             if(!course) {
                 res.status(404).send('course not found');
                 return;
             }
             
-            //update data 
+            
+            course.id = req.body.id;
             course.name = req.body.name;
-            course.password = req.body.password;
-            course.profession = req.body.profession;
-            
-            //send it
-            
+
             res.send(data);
             var json = JSON.stringify(data); 
-            fs.writeFile('users.json', json); 
+            fs.writeFile('courses.json', json); 
             res.end( JSON.stringify(data));
           });
           } else {
@@ -117,20 +114,20 @@ app.put('api/courses/:id', function(req, res)  {
 
         app.delete('api/courses/:id', function (req, res)  {
             fs.exists('courses.json', function(exists) {
-                if(exists) {
-                  console.log('File exists....');
-                  let id = req.params.id;
+            if(exists) {
+                console.log('File exists....');
+                let id = req.params.id;
            
-                  fs.readFile( __dirname + "/" + "users.json", function (err, data) {
+                fs.readFile("/Users/preeti/Desktop/app/webdir/nodeJs/expressApp/CRUD/courses.json", function (err, data) {
                  
-                    data = JSON.parse( data );
-                  const course = data.courses.find(c => c.id === parseInt(req.params.id));
-                  if(!course) {
-                      res.send('data not found');
-                      return;
-                  }
+                 data = JSON.parse( data );
+                 const course = data.courses.find(c => c.id === parseInt(req.params.id));
+                if(!course) {
+                res.status(404).send('course not found');
+                return;
+            }
                   //to delete
-                      const index = data.courses.indexOf(user);
+                const index = data.courses.indexOf(user);
                   data.courses.splice(index,1);
               //res.send("data deleted");
               res.send(data);
