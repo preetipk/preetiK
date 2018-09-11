@@ -43,12 +43,11 @@ app.get('/users', function (req, res,next) {
 
 
 
-app.post('/users/:id?', function (req, res,next) {
+app.post('/users', function (req, res,next) {
   //value of id enter by user
-    var id = parseInt(req.params.id);
-    var email = req.query.email ;
+    var id = req.body.id;
     var isIdExist = false;
-    const newUser = {
+    var newUser = {
         id : id,
         name : req.body.name,
         email:req.body.email
@@ -86,6 +85,94 @@ app.post('/users/:id?', function (req, res,next) {
     }
     }) 
 });
+
+app.put('/users/:id?', function (req, res,next) {
+  var id = parseInt(req.params.id);
+    var isIdExist = false;
+    var newUser = {
+        //id : id,
+        name : req.body.name,
+        email:req.body.email
+      }
+      console.log(newUser);
+
+    async.series([
+
+     function(callback){
+
+        users.forEach(function (obj) {
+            if(obj.id === id){
+                isIdExist = true;
+            }
+         });
+
+        if(isIdExist === true) {
+             //callback('User is exist');
+             callback();
+           }
+        else{
+          callback('User is not exist');
+        }
+},
+    function(callback){
+     //users.push(newUser);
+     callback(null,newUser)
+  }
+
+    ],function(error,done){
+       if(error){
+        res.send(error);
+      }
+      else{       
+        res.send(done);
+    }
+    }) 
+})
+
+app.delete('/users/:id?', function (req, res,next) {
+  var id = parseInt(req.params.id);
+    var isIdExist = false;
+    var newUser = {
+        //id : id,
+        name : req.body.name,
+        email:req.body.email
+      }
+      console.log(newUser);
+
+    async.series([
+
+     function(callback){
+
+        users.forEach(function (obj) {
+            if(obj.id === id){
+                isIdExist = true;
+            }
+         });
+
+        if(isIdExist === true) {
+             //callback('User is exist');
+             callback();
+           }
+        else{
+          callback('User is not exist');
+        }
+},
+    function(callback){
+     //users.push(newUser);
+     const index = users.indexOf(users);
+     users.splice(index,1);
+     callback(null,newUser)
+  }
+
+    ],function(error,done){
+       if(error){
+        res.send(error);
+      }
+      else{       
+        res.send(done);
+    }
+    }) 
+})
 
 
 app.listen(3017,() => console.log('Listening on port 3017'));
