@@ -31,94 +31,88 @@ app.get('/users', function(req, res, next) {
     })
 });
 
-app.get('/users/:id?', function(req, res, next) {
-    console.log("calling get method by id");
-    var reqparam = parseInt(req.params.id);
-    var reqquery = req.params.email;
-    var flag = true;
-
-    var result = persons.find({}, function(err, data) {
-        console.log("calling find method");
-        if (err) {
-            next(err);
-        } else {
-
-            console.log("mongodb data" + JSON.stringify(data));
-            // res.json("mongodb data"+data);
-        }
-    })
-
-    console.log("mongodb json data" + result);
+// app.get('/users/:id?', function(req, res, next) {
+//     console.log("calling get method by id");
+//     var query_id = parseInt(req.params.id);
+//     var query_email = req.params.email;
+//     var flag = true;
 
 
-    const person = result.find(c => c.id == parseInt(req.params.id));
 
-    console.log("find data" + JSON.stringify(person));
+//     var result = persons.find({}, { "_id": 0, "id": 1 }, function(err, data) {
+//         console.log("calling find method");
+//         if (err) {
+//             next(err);
+//         } else {
+//             console.log("mongodb data" + JSON.stringify(data));
+//             // res.json("mongodb data"+data);
+//         }
+//     })
 
-    async.series([
-        function(callback) {
+//     async.series([
+//         function(callback) {
 
-            if (person) {
-                isIdExist === true;
-            }
-            if (isIdExist === false) {
-                callback("id not found...cant update data");
-            } else {
-                callback();
-            }
+//             if (result.id === query_id) {
+//                 flag === true;
+//             }
+//             if (flag === false) {
+//                 callback("id not found...cant show data");
+//             } else {
+//                 callback();
+//             }
 
-        },
-        function(callback) {
-            callback(null, persons);
-        }
-    ], function(error, Data) {
-        if (error) {
-            res.send(error);
-        } else {
-            res.send(Data);
-        }
-    })
-});
+//         },
+//         function(callback) {
+//             persons.find({ "id": query_id }, function(err, data) {
+//                 callback(null, data);
+//             })
+//         }
+//     ], function(error, Data) {
+//         if (error) {
+//             res.send(error);
+//         } else {
+//             res.send(Data);
+//         }
+//     })
+// });
 
 app.get('/users/:email?', function(req, res, next) {
     console.log("calling get method by email");
-    var reqparam = parseInt(req.params.email);
-    var reqquery = req.params.email;
+    //var query_id = parseInt(req.params.email);
+    var query_email = req.params.email;
     var flag = true;
 
-    var result = persons.find({}, function(err, data) {
+    var result = persons.find({}, { "_id": 0, "email": 1 }, function(err, data) {
         console.log("calling find method");
         if (err) {
             next(err);
         } else {
-
             console.log("mongodb data" + JSON.stringify(data));
             // res.json("mongodb data"+data);
         }
     })
 
-    console.log("mongodb json data" + result);
-
-
-    const person = result.find(c => c.email == parseInt(req.params.email));
-
-    console.log("find data" + JSON.stringify(person));
+    //console.log("mongodb json data" + result);
 
     async.series([
         function(callback) {
+            console.log("in callback");
 
-            if (person) {
-                isIdExist === true;
+            if (result.email === query_email) {
+                flag === true;
+                console.log("flag is" + flag);
             }
-            if (isIdExist === false) {
-                callback("id not found...cant update data");
+            if (flag === false) {
+                callback("email not found...cant show data");
             } else {
                 callback();
             }
 
         },
         function(callback) {
-            callback(null, persons);
+            persons.find({ "email": "query_email" }, function(err, data) {
+                callback(null, data);
+            })
         }
     ], function(error, Data) {
         if (error) {
@@ -131,38 +125,34 @@ app.get('/users/:email?', function(req, res, next) {
 
 
 app.post('/users', function(req, res) {
-    id = req.body.id;
-    isIdExist = true;
+    id = parseInt(req.body.id);
+    flag = true;
     let person = new persons();
-    let person = {};
     person.id = req.body.id;
     person.name = req.body.name;
     person.email = req.body.email;
 
-    var result = persons.find({}, function(err, data) {
+    var result = persons.find({}, { "_id": 0, "id": 1 }, function(err, data) {
         console.log("calling find method");
         if (err) {
             next(err);
         } else {
-
             console.log("mongodb data" + JSON.stringify(data));
             // res.json("mongodb data"+data);
         }
     })
 
-    const person = result.find(c => c.email == parseInt(req.params.email));
-
-    console.log("find data" + JSON.stringify(person));
 
 
     async.series([
         function(callback) {
 
-            if (person) {
-                isIdExist === true;
+            if (result.id === id) {
+                flag === true;
+                console.log("flag is" + flag);
             }
-            if (isIdExist === false) {
-                callback("id not found...cant update data");
+            if (flag === true) {
+                callback("id is already exist");
             } else {
                 callback();
             }
@@ -186,44 +176,36 @@ app.post('/users', function(req, res) {
 
 app.put('/users/:id', function(req, res) {
     console.log("calling put method");
-    id = req.params.id;
-    isIdExist = true;
-    let person = {};
+    id = parseInt(req.params.id);
+    flag = true;
+    let person = new persons();
     person.id = id;
     person.name = req.body.name;
     person.email = req.body.email;
     console.log("person=" + JSON.stringify(person));
 
-    var result = persons.find({}, function(err, data) {
+    var result = persons.find({}, { "_id": 0, "id": 1 }, function(err, data) {
         console.log("calling find method");
         if (err) {
             next(err);
         } else {
-
             console.log("mongodb data" + JSON.stringify(data));
             // res.json("mongodb data"+data);
         }
     })
-
-    const person = result.find(c => c.email == parseInt(req.params.email));
-
-    console.log("find data" + JSON.stringify(person));
-
-
-
     async.series([
         function(callback) {
 
-
-            if (person) {
-                isIdExist === true;
-                console.log("flag =" + flag);
+            if (result.id === id) {
+                flag === true;
+                console.log("flag is" + flag);
             }
-            if (isIdExist === false) {
-                callback("id not found...cant update data");
+            if (flag === false) {
+                callback("id is not exist");
             } else {
                 callback();
             }
+
 
         },
         function(callback) {
@@ -244,34 +226,28 @@ app.put('/users/:id', function(req, res) {
 
 app.delete('/users/:id', function(req, res) {
     console.log("calling put method");
-    id = req.params.id;
-    isIdExist = true;
+    id = parseInt(req.params.id);
+    flag = true;
 
-    var result = persons.find({}, function(err, data) {
+
+    var result = persons.find({}, { "_id": 0, "id": 1 }, function(err, data) {
         console.log("calling find method");
         if (err) {
             next(err);
         } else {
-
             console.log("mongodb data" + JSON.stringify(data));
             // res.json("mongodb data"+data);
         }
     })
-
-    const person = result.find(c => c.email == parseInt(req.params.email));
-
-    console.log("find data" + JSON.stringify(person));
-
-
-
     async.series([
         function(callback) {
 
-            if (person) {
-                isIdExist === true;
+            if (result.id === id) {
+                flag === true;
+                console.log("flag is" + flag);
             }
-            if (isIdExist === false) {
-                callback("id not found...cant update data");
+            if (flag === false) {
+                callback("id is not exist");
             } else {
                 callback();
             }
