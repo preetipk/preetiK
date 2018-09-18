@@ -23,12 +23,8 @@ app.get('/companies', function(req, res) {
                 console.log("data is=" + data);
                 if (err) {
                     console.log(err);
-
                 } else if (data.length > 0) {
-                    companies.find({ "status": "activated" }, function(err, data) {
-                        console.log("final data=" + data);
-                        callback(null, data);
-                    })
+                    callback(null, data);
                 } else {
                     callback("data not found");
                 }
@@ -49,7 +45,7 @@ app.get('/company/:company_name', function(req, res) {
     console.log("calling get by company_name");
 
     var company_name = req.params.company_name;
-    //console.log("company_name is=" + company_name);
+    console.log("company_name is=" + company_name);
 
 
     async.series([
@@ -58,14 +54,10 @@ app.get('/company/:company_name', function(req, res) {
                 console.log("data is=" + data);
                 if (err) {
                     console.log(err);
-
                 } else if (data.length > 0) {
-                    companies.find({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, function(err, data) {
-                        console.log("final data=" + data);
-                        callback(null, data);
-                    })
+                    callback(null, data);
                 } else {
-                    callback("data not found");
+                    callback("company is not exist record or its status is deactivate");
                 }
             })
         },
@@ -98,10 +90,7 @@ app.get('/companies/:company', function(req, res) {
                     console.log(err);
 
                 } else if (data.length > 0) {
-                    companies.find({ $and: [{ "status": "activated" }, { "company_name": company }, { "state": state }] }, function(err, data) {
-                        console.log("final data=" + data);
-                        callback(null, data);
-                    })
+                    callback(null, data);
                 } else {
                     callback("data not found");
                 }
@@ -131,8 +120,6 @@ app.post('/newCompany', function(req, res) {
     newCompany.city = req.body.city;
     newCompany.status = req.body.status;
 
-
-
     async.series([
         function(callback) {
             companies.find({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, function(err, data) {
@@ -146,8 +133,6 @@ app.post('/newCompany', function(req, res) {
                     callback();
                 }
             })
-
-
         },
         function(callback) {
             newCompany.save(function(err, data) {
@@ -171,9 +156,9 @@ app.post('/newCompany', function(req, res) {
 })
 
 app.put('/companyUpdates/:company_name', function(req, res) {
-    console.log("calling put method");
+    //console.log("calling put method");
     company_name = req.params.company_name;
-    console.log("company_name=" + company_name);
+    //console.log("company_name=" + company_name);
 
     let company = {};
     company.company_name = company_name;
@@ -200,7 +185,7 @@ app.put('/companyUpdates/:company_name', function(req, res) {
 
         },
         function(callback) {
-            companies.updateOne({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, company, function(err) {
+            companies.updateMany({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, company, function(err) {
                 console.log("in update function");
                 if (err) {
                     console.log(err);
@@ -224,7 +209,7 @@ app.put('/companyUpdates', function(req, res) {
     console.log("calling put method");
     state = req.query.state;
     console.log("state=" + state);
-    isIdExist = true;
+
     let company = {};
     company.company_name = req.body.company_name;
     company.address = req.body.address;
@@ -232,12 +217,12 @@ app.put('/companyUpdates', function(req, res) {
     company.state = state;
     company.city = req.body.city;
     company.status = "activated";
-    console.log("company=" + JSON.stringify(company));
+    //console.log("company=" + JSON.stringify(company));
 
     async.series([
         function(callback) {
             companies.find({ "state": state }, function(err, data) {
-                console.log("data=" + data);
+                //console.log("data=" + data);
                 if (err) {
                     console.log(err);
                 } else if (data.length) {
@@ -246,17 +231,15 @@ app.put('/companyUpdates', function(req, res) {
                     callback("state not exist in records");
                 }
             })
-
-
         },
         function(callback) {
             companies.updateOne({ "state": state }, company, function(err) {
-                console.log("in update function");
+                //console.log("in update function");
                 if (err) {
                     console.log(err);
                     return;
                 } else {
-                    console.log(company);
+                    //console.log(company);
                     callback(null, "data with " + state + " updated successfully");
                 }
             })
@@ -270,37 +253,31 @@ app.put('/companyUpdates', function(req, res) {
     })
 })
 
-app.delete('/users/:id', function(req, res) {
-    console.log("calling delete method");
+app.delete('/companyDelete/:company_name', function(req, res) {
+    //console.log("calling delete method");
     company_name = req.params.company_name;
-    console.log("company_name=" + company_name);
-
-    var company = new companies();
-
+    //console.log("company_name=" + company_name);
 
     async.series([
         function(callback) {
             companies.find({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, function(err, data) {
                 if (err) {
                     console.log(err);
-                } else if (data.length) {
+                } else if (data.length !== 0) {
                     callback();
                 } else {
-                    callback("id not exist");
+                    callback("company not exist in recoprd or status is deactivate");
                 }
             })
-
-
         },
         function(callback) {
-            companies.updateOne({ "state": state }, company, function(err) {
-                console.log("in update function");
+            companies.updateMany({ $set: { "status": "deleted" } }, function(err) {
+                //console.log("in update function");
                 if (err) {
                     console.log(err);
                     return;
                 } else {
-                    console.log(company);
-                    callback(null, "data with " + company_name + " updated successfully");
+                    callback(null, "data with " + company_name + " deleted successfully");
                 }
             })
         }
