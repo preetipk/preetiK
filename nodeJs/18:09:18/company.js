@@ -141,7 +141,7 @@ app.post('/newCompany', function(req, res) {
                     return;
                 } else {
                     console.log(data);
-                    callback(null, "data inserted successfully");
+                    callback("data inserted successfully");
 
                 }
             })
@@ -192,7 +192,7 @@ app.put('/companyUpdates/:company_name', function(req, res) {
                     return;
                 } else {
                     console.log(company);
-                    callback(null, "data with " + company_name + " updated successfully");
+                    callback("data with " + company_name + " updated successfully");
                 }
             })
         }
@@ -211,18 +211,18 @@ app.put('/companyUpdates', function(req, res) {
     console.log("state=" + state);
 
     let company = {};
-    company.company_name = req.body.company_name;
-    company.address = req.body.address;
-    company.country = req.body.country;
+    //company.company_name = req.body.company_name;
+    //company.address = req.body.address;
+    //company.country = req.body.country;
     company.state = state;
-    company.city = req.body.city;
+    //company.city = req.body.city;
     company.status = "activated";
-    //console.log("company=" + JSON.stringify(company));
+    console.log("company=" + JSON.stringify(company));
 
     async.series([
         function(callback) {
             companies.find({ "state": state }, function(err, data) {
-                //console.log("data=" + data);
+                console.log("data=" + data);
                 if (err) {
                     console.log(err);
                 } else if (data.length) {
@@ -233,14 +233,14 @@ app.put('/companyUpdates', function(req, res) {
             })
         },
         function(callback) {
-            companies.updateOne({ "state": state }, company, function(err) {
-                //console.log("in update function");
+            companies.updateMany(company, function(err) {
+                console.log("in update function");
                 if (err) {
                     console.log(err);
                     return;
                 } else {
-                    //console.log(company);
-                    callback(null, "data with " + state + " updated successfully");
+                    //console.log("data");
+                    callback("data with " + state + " updated successfully");
                 }
             })
         }
@@ -261,9 +261,10 @@ app.delete('/companyDelete/:company_name', function(req, res) {
     async.series([
         function(callback) {
             companies.find({ $and: [{ "status": "activated" }, { "company_name": company_name }] }, function(err, data) {
+                console.log("data" + data);
                 if (err) {
                     console.log(err);
-                } else if (data.length !== 0) {
+                } else if (data.length != 0) {
                     callback();
                 } else {
                     callback("company not exist in recoprd or status is deactivate");
@@ -277,7 +278,7 @@ app.delete('/companyDelete/:company_name', function(req, res) {
                     console.log(err);
                     return;
                 } else {
-                    callback(null, "data with " + company_name + " deleted successfully");
+                    callback("data with " + company_name + " deleted successfully");
                 }
             })
         }
