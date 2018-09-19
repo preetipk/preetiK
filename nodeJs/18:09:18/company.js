@@ -211,12 +211,12 @@ app.put('/companyUpdates', function(req, res) {
     console.log("state=" + state);
 
     let company = {};
-    //company.company_name = req.body.company_name;
-    //company.address = req.body.address;
-    //company.country = req.body.country;
+    company.company_name = req.body.company_name;
+    company.address = req.body.address;
+    company.country = req.body.country;
     company.state = state;
-    //company.city = req.body.city;
-    company.status = "activated";
+    company.city = req.body.city;
+
     console.log("company=" + JSON.stringify(company));
 
     async.series([
@@ -225,7 +225,7 @@ app.put('/companyUpdates', function(req, res) {
                 console.log("data=" + data);
                 if (err) {
                     console.log(err);
-                } else if (data.length) {
+                } else if (data.length !== 0) {
                     callback();
                 } else {
                     callback("state not exist in records");
@@ -233,14 +233,14 @@ app.put('/companyUpdates', function(req, res) {
             })
         },
         function(callback) {
-            companies.updateMany(company, function(err) {
+            companies.updateMany({ "state": state }, { $set: { "status": "activated" } }, company, function(err) {
                 console.log("in update function");
                 if (err) {
                     console.log(err);
                     return;
                 } else {
                     //console.log("data");
-                    callback("data with " + state + " updated successfully");
+                    callback(null, "data with " + state + " updated successfully");
                 }
             })
         }
@@ -264,7 +264,7 @@ app.delete('/companyDelete/:company_name', function(req, res) {
                 console.log("data" + data);
                 if (err) {
                     console.log(err);
-                } else if (data.length != 0) {
+                } else if (data.length !== 0) {
                     callback();
                 } else {
                     callback("company not exist in recoprd or status is deactivate");
@@ -272,13 +272,13 @@ app.delete('/companyDelete/:company_name', function(req, res) {
             })
         },
         function(callback) {
-            companies.updateMany({ $set: { "status": "deleted" } }, function(err) {
-                //console.log("in update function");
+            companies.updateMany({ "company_name": company_name }, { $set: { "status": "deleted" } }, function(err) {
+                console.log("in update function");
                 if (err) {
                     console.log(err);
                     return;
                 } else {
-                    callback("data with " + company_name + " deleted successfully");
+                    callback(null, "data with " + company_name + " deleted successfully");
                 }
             })
         }
