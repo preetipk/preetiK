@@ -77,13 +77,13 @@ app.post('/user', function(req, res) {
             })
         },
         function(callback) {
-            newUser.save({ "status": "activated" }, function(err, data) {
+            newUser.save(function(err, data) {
                 if (err) {
                     console.log(err);
                     return;
                 } else {
                     console.log(data);
-                    callback("data inserted successfully");
+                    callback(data);
 
                 }
             })
@@ -142,17 +142,19 @@ app.put('/user/:id', function(req, res) {
     })
 })
 
-app.put('/user/:email', function(req, res) {
+app.put('/users/:email', function(req, res) {
     console.log("calling put method by email");
-    var email = req.params.email;
-    console.log("email=" + email);
+
 
     var newUsers = req.body;
     console.log("new user=" + JSON.stringify(newUsers));
 
+    var emailId = req.params.email;
+    console.log("email=" + emailId);
+
     async.series([
         function(callback) {
-            user.findOne({ "email": email }, function(err, data) {
+            user.find({ "email": emailId }, function(err, data) {
                 console.log("data=" + data);
                 if (err) {
                     console.log(err);
@@ -164,7 +166,7 @@ app.put('/user/:email', function(req, res) {
             })
         },
         function(callback) {
-            user.updateOne({ "email": email }, newUsers, function(err) {
+            user.updateOne({ "email": emailId }, newUsers, function(err) {
                 console.log("in update function");
                 if (err) {
                     console.log(err);
@@ -185,46 +187,43 @@ app.put('/user/:email', function(req, res) {
 })
 
 
-app.put('/user/:id', function(req, res) {
-    console.log("calling put method by id or email");
-    var id = req.params.id;
-    console.log("email=" + id);
+app.put('/userss/:id', function(req, res) {
 
+    let id = req.params.id;
+    let status = req.body.status;
 
     async.series([
-        function(callback) {
-            user.findOne({ $and: [{ $or: [{ "email": id }, { "_id": id }] }, { $ne: { "status": "deleted" } }] }, function(err, data) {
-                console.log("data=" + data);
-                if (err) {
-                    console.log(err);
-                } else if (data.length !== 0) {
-                    callback();
-                } else {
-                    callback("user not exist in records");
-                }
-            })
+            function(callback) {
+                user.find({ $and: [{ $or: [{ 'email': id }, { '_id': id }] }, { status: { "$ne": 'deleted' } }] },
+                    function(err, docs) {
+                        console.log(docs);
+                        if (docs.length > 0) {
+                            callback()
+                        } else {
+                            callback('Data not found to Update');
+                        }
+                    })
+            },
+            function(callback) {
+                user.update({ $or: [{ 'email': id }, { '_id': id }] }, { '$set': { 'status': status } },
+                    function(err) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        } else {
+                            callback(null, 'status is update')
+                        }
+                    })
+            },
+        ],
+        function(error, data) {
+            if (error) {
+                res.send(error);
+            } else {
+                res.send(data);
+            }
+        })
 
-
-        },
-        function(callback) {
-            user.updateOne({ $or: [{ "email": id }, { "_id": id }] }, { $set: { "status": "activated" } }, newUsers, function(err) {
-                console.log("in update function");
-                if (err) {
-                    console.log(err);
-                    return;
-                } else {
-                    console.log(newUser);
-                    callback(null, newUser);
-                }
-            })
-        }
-    ], function(error, done) {
-        if (error) {
-            res.send(error);
-        } else {
-            res.send(done);
-        }
-    })
 })
 
 
@@ -291,11 +290,14 @@ app.get('/company/:companyName', function(req, res) {
     console.log("calling get aggregate")
     async.series([
         function(callback) {
-            Company.aggregate([{ $match: { "companyInfo.fax": { $gt: 4000 } } }], function(err, data) {
-                console.log("data=" + data);
-                callback(null, data);
+            Company.aggregate([{ $match: { "companyInfo.fax": { $gt: 700000 } } }], function(err, data) {
+                if (data.length !== 0) {
+                    callback()
+                } else {
+                    callback('User isnot exist');
+                }
             })
-        }
+        },
     ], function(error, data) {
         if (error) {
             res.send(error);
@@ -305,7 +307,7 @@ app.get('/company/:companyName', function(req, res) {
     })
 })
 
-app.post('/newCompany', function(req, res) {
+app.post('/company', function(req, res) {
 
     let email = req.body.companyInfo.userInfo.userEmail;
     console.log("email=" + email);
@@ -315,10 +317,11 @@ app.post('/newCompany', function(req, res) {
     async.series([
         function(callback) {
             user.find({ "email": email }, function(err, data) {
+                console.log("data=" + data);
                 if (data.length !== 0) {
                     callback()
                 } else {
-                    callback('User isnot exist');
+                    callback('User is not exist');
                 }
             })
         },
