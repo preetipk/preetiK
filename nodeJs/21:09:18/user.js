@@ -154,7 +154,7 @@ app.put('/users/:email', function(req, res) {
 
     async.series([
         function(callback) {
-            user.find({ "email": emailId }, function(err, data) {
+            user.find({ $and: [{ "email": emailId }, { status: { "$ne": 'deleted' } }] }, function(err, data) {
                 console.log("data=" + data);
                 if (err) {
                     console.log(err);
@@ -234,7 +234,7 @@ app.delete('/user/:id', function(req, res) {
 
     async.series([
         function(callback) {
-            user.find({ "_id": id }, function(err, data) {
+            user.find({ $and: [{ "_id": id }, { status: { "$ne": 'deleted' } }] }, function(err, data) {
                 console.log("data=" + data);
                 if (err) {
                     console.log(err);
