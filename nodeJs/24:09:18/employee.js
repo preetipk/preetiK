@@ -64,45 +64,32 @@ app.post('/newEmployee', function(req, res) {
     })
 });
 
-app.get('/employee/:sort', function(req, res) {
+app.get('/employee', function(req, res) {
 
-    // var order = parseInt(req.params.sort);
-    // console.log("order=" + order);
+    var order = req.query.order;
+    console.log("order=" + order);
+
+    var pageNo = req.query.pageNo;
+    console.log("order=" + order);
 
     async.series([
-        function(callback) {
+            function(callback) {
+                Employee.paginate({}, { page: pageNo, limit: 10, sort: { empName: order || 'asc' } }, function(err, result) {
+                    console.log("result=" + result);
 
-            var query = {}
-            var pageNo = parseInt(req.query.pageNo)
-            var size = parseInt(req.query.size);
+                    callback(null, result)
 
-            if (pageNo < 0 || pageNo === 0) {
-                response = { "error": true, "message": "invalid page number, should start with 1" };
-                return res.json(response)
+                });
             }
-            query.skip = size * (pageNo - 1)
-            size.limit = size
-
-            Employee.aggregate([{ $match: { "status": "activated" } }, { $sort: { state: 1 } }], function(err, data) {
-                console.log("data is=" + data);
-                if (err) {
-                    console.log(err);
-                } else if (data.length) {
-                    callback(null, data);
-                } else {
-                    callback("data not found");
-                }
-            })
-        },
-
-    ], function(error, Data) {
-        if (error) {
-            res.send(error);
-        } else {
-            console.log("data=" + Data);
-            res.send(Data);
-        }
-    })
+        ],
+        function(error, Data) {
+            if (error) {
+                res.send(error);
+            } else {
+                console.log("data=" + Data);
+                res.send(Data);
+            }
+        })
 });
 
 app.get('/employee/:country', function(req, res) {
