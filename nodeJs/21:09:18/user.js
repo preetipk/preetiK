@@ -20,7 +20,7 @@ db.on('error', function(err) { console.log(err); })
 
 app.get("/AllUsers", function(req, res) {
     console.log("get all ");
-    user.find({}, function(error, data) {
+    user.find({ status: { "$ne": 'deleted' } }, function(error, data) {
         if (error) {
             res.send("error");
         } else {
@@ -37,7 +37,7 @@ app.get('/user/:searchPattern', function(req, res) {
     console.log("search pattern=" + regexp);
     async.series([
         function(callback) {
-            user.find({ "userInfo.userName": regexp }, function(err, data) {
+            user.find({ $and: [{ "userInfo.userName": regexp }, { status: { "$ne": 'deleted' } }] }, function(err, data) {
                 console.log(data);
                 callback(null, data);
             })
@@ -60,7 +60,6 @@ app.post('/user', function(req, res) {
     console.log("new user=" + newUser);
     email = req.body.email;
     console.log("email=" + email);
-
     console.log("new user=" + newUser);
     async.series([
         function(callback) {
@@ -68,7 +67,6 @@ app.post('/user', function(req, res) {
                 console.log("data=" + JSON.stringify(data));
                 if (err) {
                     console.log(err);
-
                 } else if (data.length !== 0) {
                     callback("data already exist");
                 } else {
@@ -84,7 +82,6 @@ app.post('/user', function(req, res) {
                 } else {
                     console.log(data);
                     callback(data);
-
                 }
             })
         }
@@ -101,14 +98,12 @@ app.put('/user/:id', function(req, res) {
     console.log("calling put method by id");
     let newUser = req.body;
     var id = req.params.id;
-    //console.log("company_name=" + company_name);
-
 
     console.log("new user=" + JSON.stringify(newUser));
 
     async.series([
         function(callback) {
-            user.find({ "_id": id }, function(err, data) {
+            user.find({ $and: [{ "_id": id }, { status: { "$ne": 'deleted' } }] }, function(err, data) {
                 console.log("data=" + data);
                 if (err) {
                     console.log(err);
@@ -186,7 +181,6 @@ app.put('/users/:email', function(req, res) {
     })
 })
 
-
 app.put('/userss/:id', function(req, res) {
 
     let id = req.params.id;
@@ -260,7 +254,6 @@ app.delete('/user/:id', function(req, res) {
         if (error) {
             res.send(error);
         } else {
-            //console.log("status=" + done);
             res.send(done);
         }
     })
@@ -357,7 +350,7 @@ app.put('/companyUpdate/:id', function(req, res) {
 
     async.series([
             function(callback) {
-                user.find({ 'email': email }, [{ $elemMatch: { 'email': email } }],
+                user.find({ $and: [{ "_id": id }, { status: { "$ne": 'deleted' } }] }, [{ $elemMatch: { 'email': email } }],
                     function(err, data) {
                         console.log("data" + data);
                         if (data.length > 0) {
@@ -394,7 +387,7 @@ app.delete('/company/:id', function(req, res) {
 
     async.series([
         function(callback) {
-            Company.find({ "_id": id }, function(err, data) {
+            Company.find({ $and: [{ "_id": id }, { status: { "$ne": 'deleted' } }] }, function(err, data) {
                 if (data.length !== 0) {
                     callback();
                 } else {
