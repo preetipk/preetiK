@@ -35,7 +35,6 @@ app.post('/newEmployee', function(req, res) {
                 console.log("data=" + JSON.stringify(data));
                 if (err) {
                     console.log(err);
-
                 } else if (data.length !== 0) {
                     callback("employee already exist or status is dactivate");
                 } else {
@@ -51,7 +50,6 @@ app.post('/newEmployee', function(req, res) {
                 } else {
                     console.log(data);
                     callback("data inserted successfully");
-
                 }
             })
         }
@@ -76,9 +74,7 @@ app.get('/employee', function(req, res) {
             function(callback) {
                 Employee.paginate({}, { page: pageNo, limit: 10, sort: { empName: order || 'asc' } }, function(err, result) {
                     console.log("result=" + result);
-
                     callback(null, result)
-
                 });
             }
         ],
@@ -97,10 +93,6 @@ app.get('/employee/:country', function(req, res) {
 
     var country = req.params.country;
     console.log("country_name=" + country);
-
-
-
-
     async.series([
         function(callback) {
             Employee.aggregate([{ $match: { "country": country } }, { $match: { "status": "activated" } }, { $group: { "_id": "$state" } }], function(err, data) {
@@ -144,7 +136,6 @@ app.get('/employee/:department', function(req, res) {
                 }
             })
         },
-
     ], function(error, Data) {
         if (error) {
             res.send(error);
@@ -154,4 +145,49 @@ app.get('/employee/:department', function(req, res) {
         }
     })
 });
+
+app.get('/employee', function(req, res) {
+    console.log("get by find pagenation");
+    var pageNo = parseInt(req.query.pageNo);
+    var size = parseInt(req.query.size);
+    var sort = req.query.sort;
+
+    var query = {};
+    if (pageNo < 0 || pageNo === 0) {
+        response = { "error": true, "message": "invalid page number, should start with 1" };
+        return res.json(response)
+    }
+    query.skip = size * (pageNo - 1);
+    query.limit = size;
+    query.sort = { "empName": sort || asc };
+    Employee.find({ "status": "activated" }, {}, query, function(err, data) {
+
+        if (err) {
+            response = { "error": true, "message": "Error fetching data" };
+        } else {
+            response = { "employee": data };
+            res.json(response);
+        }
+    });
+});
+
+app.get('/employeeAggregate', function(req, res) {
+    console.log("get by find pagenation");
+    var pageNo = parseInt(req.query.pageNo);
+    var size = parseInt(req.query.size);
+    var order = req.query.sort;
+
+    if (pageNo < 0 || pageNo === 0) {
+        response = { "error": true, "message": "invalid page number, should start with 1" };
+        return res.json(response)
+    }
+    Employee.aggregate([{ $match: { "status": "activated" } }, { "$skip": size * (pageNo - 1) }, { "$limit": size || 10 }, { "$sort": { "empName": order || 'asc' } }], function(err, data) {
+        if (err) {
+            response = { "error": true, "message": "Error fetching data" };
+        } else {
+            response = { "employee": data };
+            res.json(response);
+        }
+    });
+})
 app.listen(3029, () => console.log('Listening on port 3029'));
