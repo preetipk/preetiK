@@ -1,0 +1,33 @@
+<body ng-controller="userCtrl">
+    <table border=2>
+        <div ng-controller="userController">
+            <h1>user App</h1>
+            <thead>
+                <tr>
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>city</th>
+                    <th>status</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="value in users">
+                    <td>{{value.userNAme}}</td>
+                    <td>{{value.email}}</td>
+                    <td>{{value.userInfo.address}}</td>
+                    <td>{{value.userInfo.city}}</td>
+                    <td>{{value.status}}</td>
+
+            </tbody>
+    </table>
+    </div>
+    </table>
+    <script src="controllers/app.js"></script>
+    <script src="controllers/userController.js"></script>
+</body>
+
+</html>
