@@ -4,7 +4,7 @@ var Schema = new mongoose.Schema({
 
     companyName: String,
     "companyInfo": {
-        fax: Number,
+        Fax: Number,
         RegistartionNo: Number,
         userInfo: {
             userEmail: {
@@ -14,8 +14,9 @@ var Schema = new mongoose.Schema({
                     return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
                 }
             },
-            status: String
-        }
+
+        },
+        status: String
 
     },
 

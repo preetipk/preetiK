@@ -10,14 +10,14 @@ var Schema = new mongoose.Schema({
         }
     },
     userInfo: {
-        userName: String,
+        username: String,
         address: String
     },
     status: {
         type: String,
         enum: ['activated', 'dactivated', 'deleted']
     },
-    password: { type: String, required: true }
+    password: String
 });
 
 module.exports = mongoose.model("user", Schema);
