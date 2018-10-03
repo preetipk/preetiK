@@ -51,7 +51,7 @@
                 <p ng-show="userForm.RegistartionNo.$error.maxlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNois too long.</p>
             </div>
             <button type="submit" class="btn btn-primary" ng-click="addCompany()">AddCompany</button>
-            <button type="submit" class="btn btn-primary" ng-click="updateCompany()">UpdateCompany</button>
+            <button type="submit" class="btn btn-primary" ng-click="updateCompany(companyName, userEmail, Fax, RegistartionNo)">UpdateCompany</button>
         </form>
     </div>
 </div>
@@ -82,10 +82,13 @@
                     <td>{{value.companyInfo.status}}</td>
                     <!-- <td><a href="addCompany(value.id)">add</a></td>-->
                     <td>
-                        <a href ng-click="edit(value._id)" <i class="glyphicon glyphicon-pencil form-control-feedback"></i>Update</a>
+                        <a href ng-click="edit(value._id)"><i class="glyphicon glyphicon-pencil form-control-feedback"></i>Edit</a>
                     </td>
                     <td>
-                        <a href ng-click="remove(value._id)" <i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
+                        <a href ng-click="remove(value._id)"> <i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
+                    </td>
+                    <td>
+                        <a href ng-click="deactivate(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Deactivate</a>
                     </td>
             </tbody>
     </table>

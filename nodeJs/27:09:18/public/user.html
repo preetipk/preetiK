@@ -12,15 +12,15 @@
 
 </head>
 
-<div class="container">
+<div class="container" ng-controller="userController">
     <div class="col-sm-12 col-sm-offset-1">
         <h1>user App</h1>
 
-        <form name="userForm" ng-submit="submitForm()" novalidate>
+        <form name="userForm" ng-submit="submitForm()" novalidate ng-model-options="userlist">
             <!-- USERNAME -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control" ng-model="userlist.username" placeholder="Username" ng-minlength="3" ng-maxlength="20" ng-required="true">
+                <input type="text" name="username" class="form-control" ng-model="username" ng-bind="username" placeholder="Username" ng-minlength="3" ng-maxlength="20" ng-required="true">
                 <p ng-show="userForm.username.$error.required && (userForm.username.$dirty || submitted)" class="help-block">username is required.</p>
                 <p ng-show="userForm.username.$error.minlength && (userForm.username.$dirty || submitted)" class="help-block">Username is too short.</p>
                 <p ng-show="userForm.username.$error.maxlength && (userForm.username.$dirty || submitted)" class="help-block">Username is too long.</p>
@@ -29,26 +29,26 @@
             <!-- PASSWORD -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.password.$invalid && (userForm.password.$dirty || submitted)}">
                 <label>Password</label>
-                <input type="Password" name="password" class="form-control" ng-model="password" placeholder="Password" ng-required="true">
+                <input type="Password" name="password" class="form-control" ng-model="password" ng-bind="password" placeholder="Password" ng-required="true">
                 <p ng-show="userForm.password.$error.required && (userForm.password.$dirty || submitted)" class="help-block">password is required.</p>
             </div>
 
             <!-- ADDRESS -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.address.$invalid && (userForm.address.$dirty || submitted)}">
                 <label>Address</label>
-                <input type="text" name="address" class="form-control" ng-model="address" placeholder="Address" ng-minlength="" ng-maxlength="" ng-required="true">
+                <input type="text" name="address" class="form-control" ng-model="address" ng-bind="address" placeholder="Address" ng-minlength="" ng-maxlength="" ng-required="true">
                 <p ng-show="userForm.address.$error.required && (userForm.address.$dirty || submitted)" class="help-block">Addressis required.</p>
             </div>
 
             <!-- EMAIL -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
                 <label>Email</label>
-                <input type="email" name="email" class="form-control" ng-model="email" placeholder="Email" ng-minlength="" ng-maxlength="" ng-required="true">
+                <input type="email" name="email" class="form-control" ng-model="email" ng-bind="email" placeholder="Email" ng-minlength="" ng-maxlength="" ng-required="true">
                 <p ng-show="userForm.email.$error.required && (userForm.email.$dirty || submitted)" class="help-block">email is required.</p>
             </div>
 
             <button type="submit" class="btn btn-primary" ng-click="adduser()">AddUser</button>
-            <input type="submit" class="btn btn-primary" name="update" value="update" ng-click="updateUser(email,username,address,password)">
+            <input type="submit" class="btn btn-primary" name="update" value="update" ng-click="updateUser(email, username, address, password)">
             <!-- <button type="" ng-click="()">UpdateUser</button> -->
         </form>
     </div>
@@ -56,12 +56,13 @@
 
 <body ng-controller="userController">
     <table border=2 class="container">
-        <div ng-controller="userController">
+        <div>
 
             <thead>
                 <tr>
                     <th>userName</th>
                     <th>id</th>
+                    <!-- <th>password</th> -->
                     <th>address</th>
                     <th>email</th>
                     <th>status</th>
@@ -73,15 +74,20 @@
                 <tr ng-repeat="value in userlist[0]">
                     <td>{{value.userInfo.username}}</td>
                     <td>{{value._id}}</td>
+                    <!-- <--<td>{{value._password}}</td> -->
                     <td>{{value.userInfo.address}}</td>
                     <td>{{value.email}}</td>
                     <td>{{value.status}}</td>
                     <!-- <td><a href="addUser(value.email)">add</a></td> -->
                     <td>
-                        <a href ng-click="edit(value._id)" <i class="glyphicon glyphicon-pencil form-control-feedback"></i>Update</a>
+                        <a href ng-click="edit(value._id)"><i class="glyphicon glyphicon-pencil form-control-feedback"></i>Edit</a>
                     </td>
                     <td>
-                        <a href ng-click="remove(value._id)" <i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
+                        <a href ng-click="remove(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
+                    </td>
+
+                    <td>
+                        <a href ng-click="deactivate(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Daactivate</a>
                     </td>
             </tbody>
     </table>

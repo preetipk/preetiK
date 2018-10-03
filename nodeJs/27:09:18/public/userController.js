@@ -19,55 +19,62 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
             });
     };
 
-    // $scope.updateUser = function(email, username, address, password) {
-    //     console.log("id in ctrl to update=" + _id);
-    //     var data = {
-    //         "email": email,
-    //         "userInfo": {
-    //             "address": address,
-    //             "username": username,
-    //         },
-    //         "password": password
-    //     };
-
-    //     $http.put("/user/" + _id, data)
-    //         .then(function(response) {
-    //                 if (response) {
-    //                     $scope.msg = "data posted ...."
-    //                     refresh();
-    //                 }
-    //             },
-    //             function(response) {
-    //                 $scope.msg = "error occur";
-    //             })
-    // }
     $scope.edit = function(id) {
         _id = id;
-        $http.get("/user/" + _id)
+        console.log("id=" + _id);
+        $http.get("/user/" + id)
             .then(function(response) {
+
                     if (response) {
-                        //var self = this;
-                        $scope.user = response;
-                        console.log("response=" + response.data.user.userInfo);
-                        console.log("data=" + response.data[0]);
-                        $scope.self.username = response.data.userInfo.username;
-                        console.log("user name=" + response.data.userInfo);
-                        $scope.email = response.data.email;
-                        console.log("email=" + response.data.email);
-                        $scope.password = response.data.password;
-                        $scope.address = response.data.userInfo.address;
+                        $scope.userlist = response;
+                        console.log("res-data=" + $scope.userlist);
+                    }
+                    $scope.email = response.data[0].email;
+                    console.log("email=" + $scope.email);
 
-                        console.log("data edit  ....");
-                        //  $scope.update(id);
-                        //console.log("add=" + $scope.address);
+                    $scope.username = response.data[0].userInfo.username;
+                    console.log("userName=" + $scope.username);
 
+                    $scope.address = response.data[0].userInfo.address;
+                    console.log("address=" + $scope.address);
+
+                    $scope.password = response.data[0].password;
+                    console.log("password=" + $scope.password);
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+        $scope.updateUser();
+    }
+
+    $scope.updateUser = function(email, username, address, password) {
+        console.log("id in login to update=" + _id);
+        //console.log("name in ctrl to update=" + $scope.username);
+        var data = {
+            "email": email,
+            "userInfo": {
+                "username": username,
+                "address": address,
+            },
+            "password": password
+        };
+
+        //console.log("data in put=" + data.userInfo.username);
+
+        $http.put("/user/" + _id, data)
+            .then(function(response) {
+                    if (response !== null) {
+                        console.log("resp" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
                     }
                 },
                 function(response) {
                     $scope.msg = "error occur";
                 })
-            // $scope.updateUser();
     }
+
+
 
     var refresh = function() {
         $http.get('/user').then(function(response) {
@@ -78,6 +85,24 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
     };
 
     refresh();
+
+    $scope.deactivate = function(id) {
+        console.log("id in login to deactivate=" + id);
+        //console.log("name in ctrl to update=" + $scope.firstName);
+
+        $http.put("/users/" + id)
+            .then(function(response) {
+                    if (response) {
+                        // console.log("resp" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
+                    }
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+    }
+
 
     $scope.remove = function(id) {
         console.log("id =" + id);
