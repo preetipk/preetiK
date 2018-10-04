@@ -23,7 +23,7 @@ app.get('/user', function(req, res) {
 
     async.series([
         function(callback) {
-            User.find({ status: 'activated' }, function(err, docs) {
+            User.find({ $or: [{ status: 'activated' }, { status: "deactivated" }] }, function(err, docs) {
                 //console.log(docs);
                 callback(null, docs);
             })
@@ -42,6 +42,7 @@ app.post('/user', function(req, res) {
     let email = req.body.email;
     let data = req.body;
     data.status = "activated";
+    console.log("data=" + JSON.stringify(data));
 
     async.series([
 
@@ -84,12 +85,12 @@ app.post('/login', function(req, res) {
 
         function(callback) {
             User.find({ $and: [{ "email": email }, { "password": password }] }, function(err, data) {
-                if (data.length !== 0) {
-                    callback('Useralready exist');
+                console.log("data=" + data);
+                if (data.length > 0) {
+                    callback('User exist')
+                } else {
+                    callback("user not found")
                 }
-                //else {
-                //     callback()
-                // }
             })
         },
         // function(callback) {
@@ -106,7 +107,7 @@ app.post('/login', function(req, res) {
         if (error) {
             res.send(error);
         } else {
-            res.send(data[1]);
+            res.send(data);
         }
     })
 })
@@ -130,9 +131,9 @@ app.put('/user/:id', function(req, res) {
     console.log("user=" + JSON.stringify(data));
     console.log("user data=" + data.username);
 
-    console.log("id in connect for update=" + id);
+    console.log("id=" + id);
     // console.log("name in connect for update=" + user.firstName);
-    console.log("name in connect for update=" + req.body.username);
+    console.log("name=" + req.body.username);
 
     async.series([
             function(callback) {
@@ -182,7 +183,7 @@ app.put('/user/:id', function(req, res) {
 //put for deactivation
 app.put("/users/:_id", function(req, res) {
     // var email = req.params.email;
-    console.log("in connect for deactivate put ");
+    console.log("calling put ");
     console.log("id=" + req.params._id);
 
     User.findOne({ _id: req.params._id }, function(err, data) {
@@ -190,6 +191,30 @@ app.put("/users/:_id", function(req, res) {
             res.send(" id not exist");
         } else {
             User.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
+                if (!data) {
+                    console.log("not updated");
+                    res.send("not updated");
+                } else {
+                    res.send("data inserted");
+                }
+            })
+
+        }
+    })
+
+})
+
+//put for activated
+app.put("/userss/:_id", function(req, res) {
+    // var email = req.params.email;
+    console.log("calling put ");
+    console.log("id=" + req.params._id);
+
+    User.findOne({ _id: req.params._id }, function(err, data) {
+        if (data == null) {
+            res.send(" id not exist");
+        } else {
+            User.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
                 if (!data) {
                     console.log("not updated");
                     res.send("not updated");
@@ -243,7 +268,7 @@ app.get('/company', function(req, res) {
 
     async.series([
         function(callback) {
-            Company.find({ "companyInfo.status": 'activated' }, function(err, docs) {
+            Company.find({ $or: [{ "companyInfo.status": 'activated' }, { "companyInfo.status": 'deactivated' }] }, function(err, docs) {
                 //console.log(docs);
                 callback(null, docs);
             })
@@ -264,12 +289,11 @@ app.post('/company', function(req, res) {
     data.companyInfo.status = "activated";
 
     async.series([
-
         function(callback) {
             Company.find({ "email": email }, function(err, docs) {
                 console.log("data=" + data);
-                if (docs.length <= 0) {
-                    callback('Company is  already exist');
+                if (docs.length !== 0) {
+                    callback("Company is  already exist");
                 } else {
                     callback()
                 }
@@ -293,9 +317,6 @@ app.post('/company', function(req, res) {
         }
     })
 })
-
-
-
 
 app.delete('/company/:id', function(req, res) {
     console.log("calling delete ");
@@ -331,7 +352,7 @@ app.delete('/company/:id', function(req, res) {
     })
 })
 
-
+//status deactivated
 app.put("/companies/:_id", function(req, res) {
     // var email = req.params.email;
     console.log("in connect for deactivate put ");
@@ -355,6 +376,28 @@ app.put("/companies/:_id", function(req, res) {
 
 })
 
+//status activated
+app.put("/companiess/:_id", function(req, res) {
+    // var email = req.params.email;
+    console.log("in connect for deactivate put ");
+    console.log("id=" + req.params._id);
+
+    Company.find({ _id: req.params._id }, function(err, data) {
+        if (data == null) {
+            res.send(" id not exist");
+        } else {
+            Company.update({ _id: req.params._id }, { $set: { "companyInfo.status": "activated" } }, function(err, data) {
+                if (data.length === 0) {
+                    console.log("not updated");
+                    res.send("not updated");
+                } else {
+                    res.send("updated");
+                }
+            })
+        }
+    })
+})
+
 
 app.get("/company/:id", function(req, res) {
     var id = req.params.id;
@@ -369,14 +412,9 @@ app.get("/company/:id", function(req, res) {
 app.put('/company/:id', function(req, res) {
     console.log("in connect for update=");
     let id = req.params.id;
-    var cmp = req.body;
-    console.log("cmp=" + cmp)
-        // console.log("user data=" + user.data)
-
-    console.log("id in connect for update=" + id);
-    // console.log("name in connect for update=" + user.firstName);
-    // console.log("name in connect for update=" + req.body.firstName);
-
+    var company = req.body;
+    console.log("cmp=" + company);
+    console.log("id=" + id);
     async.series([
             function(callback) {
                 Company.find({ '_id': req.params.id },

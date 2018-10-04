@@ -1,5 +1,16 @@
 app.controller("companyController", ['$scope', '$http', function($scope, $http) {
 
+    //get data
+    var refresh = function() {
+        $http.get('/company').then(function(response) {
+            console.log("I got the data I requested");
+            $scope.companylist = response.data;
+            //console.log($scope.userlist);
+        });
+    };
+    refresh();
+
+    //add new company
     $scope.addCompany = function() {
         console.log("adding company");
         $scope.data = { "companyInfo": { "userInfo": {} } }
@@ -13,23 +24,27 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
 
         $http.post('/company', $scope.data)
             .then(function(response) {
-                console.log(response);
+                console.log("in post");
+                console.log("res=" + response);
+                if (response.data === "Company is  already exist") {
+                    alert("email is already exist");
+                }
                 refresh();
             });
     };
+    //validations to submit form
+    $scope.submitForm = function() {
+        $scope.submitted = true;
 
-
-
-    var refresh = function() {
-        $http.get('/company').then(function(response) {
-            console.log("I got the data I requested");
-            $scope.companylist = response.data;
-            //console.log($scope.userlist);
-        });
+        if ($scope.userForm.$valid) {
+            console.log("in validate function");
+            alert("Form is valid!");
+        } else {
+            alert("Please correct errors!");
+        }
     };
 
-    refresh();
-
+    //remove data
     $scope.remove = function(id) {
         console.log("id =" + id);
         $http.delete('/company/' + id).then(function(response) {
@@ -37,6 +52,7 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
         });
     };
 
+    //status deactivate
     $scope.deactivate = function(id) {
         console.log("id in login to deactivate=" + id);
         console.log("name in ctrl to update=" + $scope.companyName);
@@ -44,7 +60,23 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
         $http.put("/companies/" + id)
             .then(function(response) {
                     if (response) {
-                        // console.log("resp" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
+                    }
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+    }
+
+    //status activated
+    $scope.activated = function(id) {
+        console.log("id in login to deactivate=" + id);
+        console.log("name in ctrl to update=" + $scope.companyName);
+
+        $http.put("/companiess/" + id)
+            .then(function(response) {
+                    if (response) {
                         $scope.msg = "data posted ...."
                         refresh();
                     }
@@ -62,27 +94,21 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
             .then(function(response) {
 
                     if (response) {
-                        $scope.companylist = response;
-                        console.log("res-data=" + $scope.companylist);
+                        $scope.company = response;
+                        $scope.companyName = response.data[0].companyName;
+                        $scope.userEmail = response.data[0].companyInfo.userInfo.userEmail;
+                        $scope.Fax = response.data[0].companyInfo.Fax;
+                        $scope.RegistartionNo = response.data[0].companyInfo.RegistartionNo;
                     }
-                    $scope.companyName = response.data[0].companyName;
-                    console.log("userName=" + $scope.companyName);
-                    $scope.userEmail = response.data[0].companyInfo.userInfo.userEmail;
-                    console.log("email=" + $scope.userEmail);
-                    $scope.Fax = response.data[0].companyInfo.Fax;
-                    console.log("address=" + $scope.Fax);
-                    $scope.RegistartionNo = response.data[0].companyInfo.RegistartionNo;
-                    console.log("password=" + $scope.RegistartionNo);
                 },
                 function(response) {
                     $scope.msg = "error occur";
                 })
-        $scope.updateCompany();
     }
 
     $scope.updateCompany = function(companyName, userEmail, Fax, RegistartionNo) {
         console.log("id in login to update=" + _id);
-        //console.log("name in ctrl to update=" + $scope.username);
+
         var data = {
             "companyName": companyName,
             "companyInfo": {
@@ -94,9 +120,6 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
             },
 
         };
-
-        //console.log("data in put=" + data.userInfo.username);
-
         $http.put("/company/" + _id, data)
             .then(function(response) {
                     if (response !== null) {

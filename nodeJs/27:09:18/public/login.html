@@ -22,9 +22,9 @@
 
             <form name="userForm" ng-submit="submitForm()" novalidate>
                 <!-- EMAIL -->
-                <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+                <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
                     <label>userEmail</label>
-                    <input type="text" name="email" class="form-control" ng-model="email" placeholder="Your userEmail" ng-minlength="" ng-maxlength="" ng-required="true">
+                    <input type="text" name="email" class="form-control" ng-model="email" placeholder="Your userEmail" ng-required="true">
                     <p ng-show="userForm.email.$error.required && (userForm.email.$dirty || submitted)" class="help-block">You username is required.</p>
                 </div>
 

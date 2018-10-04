@@ -4,20 +4,21 @@ var Schema = new mongoose.Schema({
 
     email: {
         type: String,
+        required: true,
         unique: true,
         validate: function(email) {
             return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
         }
     },
     userInfo: {
-        username: String,
-        address: String
+        username: { type: String, required: true },
+        address: { type: String, required: true }
     },
     status: {
         type: String,
         enum: ['activated', 'dactivated', 'deleted']
     },
-    password: String
+    password: { type: String, required: true }
 });
 
 module.exports = mongoose.model("user", Schema);

@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-animate.min.js"></script>
-    <script src="app.js"></script>
 
 </head>
 
@@ -18,37 +17,37 @@
         <form name="userForm" ng-submit="submitForm()" novalidate>
 
             <!-- COMPANYNAME -->
-            <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+            <div class="form-group" ng-class="{ 'has-error' : userForm.companyName.$invalid && (userForm.companyName.$dirty || submitted)}">
                 <label>Company Name</label>
-                <input type="text" name="companyName" class="form-control" ng-model="companyName" placeholder="companyName" ng-minlength="3" ng-maxlength="20" ng-required="true">
+                <input type="text" name="companyName" class="form-control" ng-model="companyName" placeholder="companyName" ng-minlength="8" ng-maxlength="20" ng-required="true">
                 <p ng-show="userForm.companyName.$error.required && (userForm.companyName.$dirty || submitted)" class="help-block">username is required.</p>
-                <p ng-show="userForm.companyName.$error.minlength && (userForm.companyName.$dirty || submitted)" class="help-block">Username is too short.</p>
-                <p ng-show="userForm.companyName.$error.maxlength && (userForm.companyName.$dirty || submitted)" class="help-block">Username is too long.</p>
+                <p ng-show="userForm.companyName.$error.minlength && (userForm.companyName.$dirty || submitted)" class="help-block">companyName should contain more than 8 characters.</p>
+                <p ng-show="userForm.companyName.$error.maxlength && (userForm.companyName.$dirty || submitted)" class="help-block">companyName should contain less than 20 characters.</p>
             </div>
 
             <!-- UserEMAIL -->
-            <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$dirty || submitted)}">
+            <div class="form-group" ng-class="{ 'has-error' : userForm.userEmail.$invalid && (userForm.userEmail.$dirty || submitted)}">
                 <label>Email</label>
                 <input type="email" name="userEmail" class="form-control" ng-model="userEmail" placeholder="UserEmail" ng-minlength="" ng-maxlength="" ng-required="true">
                 <p ng-show="userForm.userEmail.$error.required && (userForm.userEmail.$dirty || submitted)" class="help-block">email is required.</p>
             </div>
 
             <!-- FAX -->
-            <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+            <div class="form-group" ng-class="{ 'has-error' : userForm.Fax.$invalid && (userForm.Fax.$dirty || submitted)}">
                 <label>Fax</label>
-                <input type="number" name="Fax" class="form-control" ng-model="Fax" placeholder="Fax" ng-minlength="3" ng-maxlength="20" ng-required="true">
+                <input type="number" name="Fax" class="form-control" ng-model="Fax" placeholder="Fax" ng-minlength="6" ng-maxlength="20" ng-required="true">
                 <p ng-show="userForm.Fax.$error.required && (userForm.Fax.$dirty || submitted)" class="help-block">Fax is required.</p>
-                <p ng-show="userForm.Fax.$error.minlength && (userForm.Fax.$dirty || submitted)" class="help-block">Fax is too short.</p>
-                <p ng-show="userForm.Fax.$error.maxlength && (userForm.Fax.$dirty || submitted)" class="help-block">Fax is too long.</p>
+                <p ng-show="userForm.Fax.$error.minlength && (userForm.Fax.$dirty || submitted)" class="help-block">Fax should contain more than 6 characters.</p>
+                <p ng-show="userForm.Fax.$error.maxlength && (userForm.Fax.$dirty || submitted)" class="help-block">Fax should contain less than 20 characters.</p>
             </div>
 
             <!-- Registration No -->
-            <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$dirty || submitted)}">
+            <div class="form-group" ng-class="{ 'has-error' : userForm.RegistartionNo.$invalid && (userForm.RegistartionNo.$dirty || submitted)}">
                 <label>Reg.No</label>
-                <input type="number" name="RegistartionNo" class="form-control" ng-model="RegistartionNo" placeholder="RegistartionNo" ng-minlength="3" ng-maxlength="20" ng-required="true">
-                <p ng-show="userForm.RegistartionNo.$error.required && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNois required.</p>
-                <p ng-show="userForm.RegistartionNo.$error.minlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo is too short.</p>
-                <p ng-show="userForm.RegistartionNo.$error.maxlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNois too long.</p>
+                <input type="number" name="RegistartionNo" class="form-control" ng-model="RegistartionNo" placeholder="RegistartionNo" ng-minlength="8" ng-maxlength="20" ng-required="true">
+                <p ng-show="userForm.RegistartionNo.$error.required && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo is required.</p>
+                <p ng-show="userForm.RegistartionNo.$error.minlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain more than 8 characters.</p>
+                <p ng-show="userForm.RegistartionNo.$error.maxlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain less than 8 characters.</p>
             </div>
             <button type="submit" class="btn btn-primary" ng-click="addCompany()">AddCompany</button>
             <button type="submit" class="btn btn-primary" ng-click="updateCompany(companyName, userEmail, Fax, RegistartionNo)">UpdateCompany</button>
@@ -56,9 +55,9 @@
     </div>
 </div>
 
-<body ng-controller="companyController">
+<body>
     <table border=2>
-        <div ng-controller="companyController">
+        <div>
             <h1>Company App</h1>
             <thead>
                 <tr>
@@ -80,7 +79,7 @@
                     <td>{{value.companyInfo.Fax}}</td>
                     <td>{{value.companyInfo.RegistartionNo}}</td>
                     <td>{{value.companyInfo.status}}</td>
-                    <!-- <td><a href="addCompany(value.id)">add</a></td>-->
+
                     <td>
                         <a href ng-click="edit(value._id)"><i class="glyphicon glyphicon-pencil form-control-feedback"></i>Edit</a>
                     </td>
@@ -90,12 +89,17 @@
                     <td>
                         <a href ng-click="deactivate(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Deactivate</a>
                     </td>
+                    <td>
+                        <a href ng-click="activated(value._id)"><i class="glyphicon glyphicon-ok form-control-feedback"></i>Activate</a>
+                    </td>
+                </tr>
             </tbody>
     </table>
     </div>
     </table>
-    <script src="/app.js"></script>
-    <script src="/companyController.js"></script>
+
 </body>
 
 </html>
+
+<p><a href="#!/user"><b>Back to user</b> </a></p>

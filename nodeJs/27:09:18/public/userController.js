@@ -1,11 +1,35 @@
 app.controller("userController", ['$scope', '$http', function($scope, $http) {
 
+    var refresh = function() {
+        $http.get('/user').then(function(response) {
+            console.log("I got the data I requested");
+            $scope.userlist = response.data;
+            //console.log($scope.userlist);
+        });
+    };
+
+    refresh();
+
+    $scope.submitForm = function() {
+
+        // Set the 'submitted' flag to true
+        $scope.submitted = true;
+
+        if ($scope.userForm.$valid) {
+            console.log("in validate function");
+            alert("Form is valid!");
+        } else {
+            alert("Please correct errors!");
+        }
+    };
+
     $scope.adduser = function() {
         console.log("adding user");
         $scope.data = { "userInfo": {} }
         $scope.data.email = $scope.email;
         $scope.data.userInfo.username = $scope.username;
-        $scope.data.passwoprd = $scope.password;
+        $scope.data.password = $scope.password;
+        console.log("passwors" + $scope.password);
         $scope.data.userInfo.address = $scope.address;
 
         console.log("dshg=" + $scope.username);
@@ -14,9 +38,14 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
 
         $http.post('/user', $scope.data)
             .then(function(response) {
-                console.log(response);
+                console.log("in post controller");
+                if (response.data == 'User is  already exist') {
+                    alert("email is already exist");
+                }
                 refresh();
             });
+
+
     };
 
     $scope.edit = function(id) {
@@ -76,21 +105,30 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
 
 
 
-    var refresh = function() {
-        $http.get('/user').then(function(response) {
-            console.log("I got the data I requested");
-            $scope.userlist = response.data;
-            //console.log($scope.userlist);
-        });
-    };
 
-    refresh();
 
     $scope.deactivate = function(id) {
         console.log("id in login to deactivate=" + id);
         //console.log("name in ctrl to update=" + $scope.firstName);
 
         $http.put("/users/" + id)
+            .then(function(response) {
+                    if (response) {
+                        // console.log("resp" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
+                    }
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+    }
+
+    $scope.activated = function(id) {
+        console.log("id in login to activate=" + id);
+        //console.log("name in ctrl to update=" + $scope.firstName);
+
+        $http.put("/userss/" + id)
             .then(function(response) {
                     if (response) {
                         // console.log("resp" + response);
