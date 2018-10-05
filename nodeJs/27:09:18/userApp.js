@@ -115,14 +115,11 @@ app.post('/login', function(req, res) {
 app.get('/user/:id', function(req, res) {
     var id = req.params.id;
     console.log("id=" + id);
-    User.find({ "_id": mongoose.Types.ObjectId(id) }, function(err, data) {
+    User.find({ $and: [{ "_id": mongoose.Types.ObjectId(id) }, { "status": "activated" }] }, function(err, data) {
         console.log("data=" + data);
         res.send(data);
     })
 })
-
-
-
 
 app.put('/user/:id', function(req, res) {
     console.log("in update ");
@@ -185,11 +182,15 @@ app.put("/users/:_id", function(req, res) {
     // var email = req.params.email;
     console.log("calling put ");
     console.log("id=" + req.params._id);
+    var data = req.body;
+
+    console.log("status=" + JSON.stringify(data.status));
 
     User.findOne({ _id: req.params._id }, function(err, data) {
         if (data == null) {
             res.send(" id not exist");
-        } else {
+        } else if (User.find({ "status": "activated" })) {
+
             User.updateOne({ _id: req.params._id }, { $set: { "status": "deactivated" } }, function(err, data) {
                 if (!data) {
                     console.log("not updated");
@@ -210,9 +211,14 @@ app.put("/userss/:_id", function(req, res) {
     console.log("calling put ");
     console.log("id=" + req.params._id);
 
+    // var data = req.body;
+    console.log("data=" + JSON.stringify(req.body));
+
     User.findOne({ _id: req.params._id }, function(err, data) {
         if (data == null) {
+            // console.log("hjkhj=" + JSON.stringify(data));
             res.send(" id not exist");
+
         } else {
             User.updateOne({ _id: req.params._id }, { $set: { "status": "activated" } }, function(err, data) {
                 if (!data) {
@@ -224,6 +230,8 @@ app.put("/userss/:_id", function(req, res) {
             })
 
         }
+
+
     })
 
 })
@@ -290,9 +298,9 @@ app.post('/company', function(req, res) {
 
     async.series([
         function(callback) {
-            Company.find({ "email": email }, function(err, docs) {
-                console.log("data=" + data);
-                if (docs.length !== 0) {
+            Company.find({ "companyInfo.userInfo.userEmail": email }, function(err, docs) {
+                console.log("data=" + docs);
+                if (docs.length != 0) {
                     callback("Company is  already exist");
                 } else {
                     callback()
@@ -304,6 +312,7 @@ app.post('/company', function(req, res) {
             company.save(function(err) {
                 if (err) {
                     console.log(err);
+                    callback(null, "Company is  already exist")
                 } else {
                     callback(null, "company is added");
                 }
@@ -397,8 +406,6 @@ app.put("/companiess/:_id", function(req, res) {
         }
     })
 })
-
-
 app.get("/company/:id", function(req, res) {
     var id = req.params.id;
     console.log("inside connect.js cmp app for edit" + id)
@@ -407,8 +414,6 @@ app.get("/company/:id", function(req, res) {
         res.send(docs);
     });
 })
-
-
 app.put('/company/:id', function(req, res) {
     console.log("in connect for update=");
     let id = req.params.id;

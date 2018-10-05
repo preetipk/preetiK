@@ -10,18 +10,18 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
 
     refresh();
 
-    $scope.submitForm = function() {
+    // $scope.submitForm = function() {
 
-        // Set the 'submitted' flag to true
-        $scope.submitted = true;
+    //     // Set the 'submitted' flag to true
+    //     $scope.submitted = true;
 
-        if ($scope.userForm.$valid) {
-            console.log("in validate function");
-            alert("Form is valid!");
-        } else {
-            alert("Please correct errors!");
-        }
-    };
+    //     if ($scope.userForm.$valid) {
+    //         console.log("in validate function");
+    //         alert("Form is valid!");
+    //     } else {
+    //         alert("Please correct errors!");
+    //     }
+    // };
 
     $scope.adduser = function() {
         console.log("adding user");
@@ -39,6 +39,7 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
         $http.post('/user', $scope.data)
             .then(function(response) {
                 console.log("in post controller");
+
                 if (response.data == 'User is  already exist') {
                     alert("email is already exist");
                 }
@@ -88,12 +89,15 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
             "password": password
         };
 
-        //console.log("data in put=" + data.userInfo.username);
+        var emai = $scope.email;
+        console.log("email=" + emai);
+        var Email = data.email;
+        console.log("email from database=" + Email);
 
         $http.put("/user/" + _id, data)
             .then(function(response) {
                     if (response !== null) {
-                        console.log("resp" + response);
+                        console.log("resp=" + response);
                         $scope.msg = "data posted ...."
                         refresh();
                     }
@@ -114,7 +118,7 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
         $http.put("/users/" + id)
             .then(function(response) {
                     if (response) {
-                        // console.log("resp" + response);
+                        console.log("resp" + response);
                         $scope.msg = "data posted ...."
                         refresh();
                     }

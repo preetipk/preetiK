@@ -33,16 +33,16 @@ app.controller("companyController", ['$scope', '$http', function($scope, $http) 
             });
     };
     //validations to submit form
-    $scope.submitForm = function() {
-        $scope.submitted = true;
+    // $scope.submitForm = function() {
+    //     $scope.submitted = true;
 
-        if ($scope.userForm.$valid) {
-            console.log("in validate function");
-            alert("Form is valid!");
-        } else {
-            alert("Please correct errors!");
-        }
-    };
+    //     if ($scope.userForm.$valid) {
+    //         console.log("in validate function");
+    //         alert("Form is valid!");
+    //     } else {
+    //         alert("Please correct errors!");
+    //     }
+    // };
 
     //remove data
     $scope.remove = function(id) {

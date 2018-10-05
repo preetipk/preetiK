@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-animate.min.js"></script>
 
 </head>
-
+<h1 style="color: brown" align="center">Company Page</h1>
 <div class="container">
     <div class="col-sm-8 col-sm-offset-2">
 
@@ -19,9 +19,9 @@
             <!-- COMPANYNAME -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.companyName.$invalid && (userForm.companyName.$dirty || submitted)}">
                 <label>Company Name</label>
-                <input type="text" name="companyName" class="form-control" ng-model="companyName" placeholder="companyName" ng-minlength="8" ng-maxlength="20" ng-required="true">
+                <input type="text" name="companyName" class="form-control" ng-model="companyName" placeholder="companyName" ng-minlength="4" ng-maxlength="20" ng-required="true">
                 <p ng-show="userForm.companyName.$error.required && (userForm.companyName.$dirty || submitted)" class="help-block">username is required.</p>
-                <p ng-show="userForm.companyName.$error.minlength && (userForm.companyName.$dirty || submitted)" class="help-block">companyName should contain more than 8 characters.</p>
+                <p ng-show="userForm.companyName.$error.minlength && (userForm.companyName.$dirty || submitted)" class="help-block">companyName should contain more than 4 characters.</p>
                 <p ng-show="userForm.companyName.$error.maxlength && (userForm.companyName.$dirty || submitted)" class="help-block">companyName should contain less than 20 characters.</p>
             </div>
 
@@ -44,62 +44,69 @@
             <!-- Registration No -->
             <div class="form-group" ng-class="{ 'has-error' : userForm.RegistartionNo.$invalid && (userForm.RegistartionNo.$dirty || submitted)}">
                 <label>Reg.No</label>
-                <input type="number" name="RegistartionNo" class="form-control" ng-model="RegistartionNo" placeholder="RegistartionNo" ng-minlength="8" ng-maxlength="20" ng-required="true">
+                <input type="number" name="RegistartionNo" class="form-control" ng-model="RegistartionNo" placeholder="RegistartionNo" ng-minlength="6" ng-maxlength="20" ng-required="true">
                 <p ng-show="userForm.RegistartionNo.$error.required && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo is required.</p>
-                <p ng-show="userForm.RegistartionNo.$error.minlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain more than 8 characters.</p>
-                <p ng-show="userForm.RegistartionNo.$error.maxlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain less than 8 characters.</p>
+                <p ng-show="userForm.RegistartionNo.$error.minlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain more than 6 characters.</p>
+                <p ng-show="userForm.RegistartionNo.$error.maxlength && (userForm.RegistartionNo.$dirty || submitted)" class="help-block">RegistartionNo should contain less than 20 characters.</p>
             </div>
-            <button type="submit" class="btn btn-primary" ng-click="addCompany()">AddCompany</button>
-            <button type="submit" class="btn btn-primary" ng-click="updateCompany(companyName, userEmail, Fax, RegistartionNo)">UpdateCompany</button>
+            <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" ng-click="addCompany()">AddCompany</button>
+            <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" ng-click="updateCompany(companyName, userEmail, Fax, RegistartionNo)">UpdateCompany</button>
         </form>
     </div>
 </div>
 
 <body>
-    <table border=2>
-        <div>
-            <h1>Company App</h1>
-            <thead>
-                <tr>
-                    <th>companyName</th>
-                    <th>userEmail</th>
-                    <th>id</th>
-                    <th>fax</th>
-                    <th>RegistartionNo</th>
-                    <th>status</th>
-                    <th colspan="3">Action</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><span class="lead">List of Companies </span></div>
+        <div class="tablecontainer">
+            <table class="table table-hover" border=2>
+                <div>
 
-                <tr ng-repeat="value in companylist[0]">
-                    <td>{{value.companyName}}</td>
-                    <td>{{value.companyInfo.userInfo.userEmail}}</td>
-                    <td>{{value._id}}</td>
-                    <td>{{value.companyInfo.Fax}}</td>
-                    <td>{{value.companyInfo.RegistartionNo}}</td>
-                    <td>{{value.companyInfo.status}}</td>
+                    <thead>
+                        <tr>
+                            <th>companyName</th>
+                            <th>userEmail</th>
+                            <th>id</th>
+                            <th>fax</th>
+                            <th>RegistartionNo</th>
+                            <th>status</th>
+                            <th colspan="4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <td>
-                        <a href ng-click="edit(value._id)"><i class="glyphicon glyphicon-pencil form-control-feedback"></i>Edit</a>
-                    </td>
-                    <td>
-                        <a href ng-click="remove(value._id)"> <i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
-                    </td>
-                    <td>
-                        <a href ng-click="deactivate(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Deactivate</a>
-                    </td>
-                    <td>
-                        <a href ng-click="activated(value._id)"><i class="glyphicon glyphicon-ok form-control-feedback"></i>Activate</a>
-                    </td>
-                </tr>
-            </tbody>
-    </table>
+                        <tr ng-repeat="value in companylist[0]">
+                            <td>{{value.companyName}}</td>
+                            <td>{{value.companyInfo.userInfo.userEmail}}</td>
+                            <td>{{value._id}}</td>
+                            <td>{{value.companyInfo.Fax}}</td>
+                            <td>{{value.companyInfo.RegistartionNo}}</td>
+                            <td>{{value.companyInfo.status}}</td>
+
+                            <td>
+                                <a href ng-click="edit(value._id)"><i class="glyphicon glyphicon-pencil form-control-feedback"></i>Edit</a>
+                            </td>
+                            <td>
+                                <a href ng-click="remove(value._id)"> <i class="glyphicon glyphicon-remove form-control-feedback"></i>Delete</a>
+                            </td>
+                            <td>
+                                <a href ng-click="deactivate(value._id)"><i class="glyphicon glyphicon-remove form-control-feedback"></i>Deactivate</a>
+                            </td>
+                            <td>
+                                <a href ng-click="activated(value._id)"><i class="glyphicon glyphicon-ok form-control-feedback"></i>Activate</a>
+                            </td>
+                        </tr>
+                    </tbody>
+            </table>
+            </div>
+        </div>
     </div>
-    </table>
+    </div>
+
 
 </body>
 
 </html>
-
-<p><a href="#!/user"><b>Back to user</b> </a></p>
+<h1><a href="#!/user" style="color:black"><i class="glyphicon glyphicon-backward form-control-feedback"></i>Back to user</a></h1>
+<!-- <p><a href="#!/user"><b>Back to user</b> </a></p> -->
