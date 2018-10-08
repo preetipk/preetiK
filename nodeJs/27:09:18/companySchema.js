@@ -4,7 +4,7 @@ var Schema = new mongoose.Schema({
 
     companyName: { type: String, required: true },
     "companyInfo": {
-        Fax: { type: Number, required: true },
+        Fax: Number,
         RegistartionNo: { type: Number, required: true },
         userInfo: {
             userEmail: {

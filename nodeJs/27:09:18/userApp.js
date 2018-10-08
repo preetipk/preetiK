@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+app.set('view engine', 'jade');
 app.use(express.json());
 var bodyParser = require('body-parser');
 const User = require('./userSchema');
@@ -145,7 +146,7 @@ app.put('/user/:id', function(req, res) {
                     })
             },
             function(callback) {
-                User.update({ 'email': req.body.email }, { '$set': { "userInfo.username": req.body.userInfo.username, password: req.body.password, "email": req.body.email, "userInfo.address": req.body.userInfo.address } },
+                User.update({ 'email': req.body.email }, { '$set': { "userInfo.username": req.body.userInfo.username, "password": req.body.password, "email": req.body.email, "userInfo.address": req.body.userInfo.address } },
                     function(err) {
                         if (err) {
                             console.log(err);
@@ -433,7 +434,7 @@ app.put('/company/:id', function(req, res) {
                     })
             },
             function(callback) {
-                Company.update({ '_id': req.params.id }, { '$set': { companyName: req.body.companyName, "ompanyInfo.Fax": req.body.companyInfo.Fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, } },
+                Company.update({ '_id': req.params.id }, { '$set': { companyName: req.body.companyName, "companyInfo.Fax": req.body.companyInfo.Fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, } },
                     function(err) {
                         if (err) {
                             console.log(err);

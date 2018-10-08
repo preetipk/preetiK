@@ -74,8 +74,8 @@
 
             <!-- <button type="submit" ng-disabled="!userForm.$valid" name="update" class="btn btn-primary" value="update" ng-click="updateUser(email, username, address, password)"> -->
 
-            <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" ng-disabled="{{ userForm.$invalid }}" ng-click="adduser()">AddUser</button>
-            <input type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" name="update" value="update" ng-disabled="{{ userForm.$invalid }}" ng-click="updateUser(email, username, address, password)">
+            <button type="submit" ng-disabled="!userForm.$valid" ng-hide="userForm.adduser()" class="btn btn-primary" ng-click="adduser()">AddUser</button>
+            <button type="submit" ng-disabled="((!isDisabled) && (userForm.$valid)) ?  false : true" class="btn btn-primary" name="update" value="update" ng-click="updateUser(email, username, address, password)">UpdateUser</button>
 
         </form>
     </div>
@@ -121,6 +121,9 @@
                     </tbody>
             </table>
             </div>
+            <div>
+                <h1><a href="#!/company" style="color:black" align="center"><i class="glyphicon glyphicon-forward form-control-feedback"></i>Go To Company</a></h1>
+            </div>
         </div>
     </div>
     </div>
@@ -129,6 +132,6 @@
 
 </html>
 
-<h1><a href="#!/company" style="color:black" align="center"><i class="glyphicon glyphicon-forward form-control-feedback"></i>Go To Company</a></h1>
+
 
 <!--ng-minlength="8" ng-maxlength="15"-->

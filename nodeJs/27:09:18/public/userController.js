@@ -97,19 +97,26 @@ app.controller("userController", ['$scope', '$http', function($scope, $http) {
         $http.put("/user/" + _id, data)
             .then(function(response) {
                     if (response !== null) {
-                        console.log("resp=" + response);
-                        $scope.msg = "data posted ...."
-                        refresh();
+                        if (data.email != Email) {
+                            alert("email should not be change");
+                        } else {
+                            console.log("resp=" + response);
+                            $scope.msg = "data posted ...."
+                            refresh();
+                        }
                     }
                 },
                 function(response) {
                     $scope.msg = "error occur";
                 })
+
+
+        $scope.isDisabled = false;
+
+        $scope.edit = function() {
+            $scope.isDisabled = !$scope.isDisabled;
+        }
     }
-
-
-
-
 
     $scope.deactivate = function(id) {
         console.log("id in login to deactivate=" + id);
