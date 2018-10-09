@@ -28,17 +28,17 @@ app.config(function($routeProvider) {
 
 });
 
-// app.run(["$rootScope", "$location", "authFact", function($rootScope, $location, authFact) {
-//     $rootScope.$on('$routeChangeStart', function(event, next, current) {
-//         console.log(event);
-//         console.log(current);
-//         console.log(next);
-//         //if route is authenticated
-//         if (next.$$route.authenticated) {
-//             var userAuth = authFact.getAccessTocken();
-//             if (!userAuth) {
-//                 $location.path('/');
-//             }
-//         }
-//     });
-// }]);
+app.run(["$rootScope", "$location", "authFact", function($rootScope, $location, authFact) {
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+        console.log(event);
+        console.log(current);
+        console.log(next);
+        //if route is authenticated
+        if (next.$$route.authenticated) {
+            var userAuth = authFact.getAccessTocken();
+            if (!userAuth) {
+                $location.path('/');
+            }
+        }
+    });
+}]);

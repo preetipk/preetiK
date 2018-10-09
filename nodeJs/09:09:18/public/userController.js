@@ -10,18 +10,7 @@ app.controller("userController", ['$scope', '$http', '$location', function($scop
 
     refresh();
 
-    // $scope.submitForm = function() {
 
-    //     // Set the 'submitted' flag to true
-    //     $scope.submitted = true;
-
-    //     if ($scope.userForm.$valid) {
-    //         console.log("in validate function");
-    //         alert("Form is valid!");
-    //     } else {
-    //         alert("Please correct errors!");
-    //     }
-    // };
 
     $scope.adduser = function() {
         $scope.login = 1

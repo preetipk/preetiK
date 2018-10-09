@@ -1,4 +1,4 @@
-app.controller("loginController", ['$scope', '$http', '$location', function($scope, $http, $location) {
+app.controller("loginController", ['$scope', '$http', '$location', 'authFact', function($scope, $http, $location, authFact) {
 
 
 
@@ -15,20 +15,20 @@ app.controller("loginController", ['$scope', '$http', '$location', function($sco
 
 
                 if (response.data === 'User exist') {
-                    // console.log("authResponse=" + response.authResponse);
-                    // if (response.authResponse) {
-                    //     console.log("welcome");
-                    //     //var accessTocken = getAuthResponse().accessTocken;
-                    //     console.log(accessTocken);
-                    //     authFact.setAccessTocken(accessTocken);
+                    console.log("authResponse=" + response.authResponse);
+                    if (response.authResponse) {
+                        console.log("welcome");
+                        var accessTocken = getAuthResponse().accessTocken;
+                        console.log(accessTocken);
+                        authFact.setAccessTocken(accessTocken);
 
-                    //     $location.path("/user");
+                        $location.path("/user");
 
-                    // } else {
-                    //     alert('User canceled login');
-                    // }
+                    } else {
+                        alert('User canceled login');
+                    }
 
-                    $location.path('/user');
+                    // $location.path('/user');
                 } else {
                     alert("user name or password is incorrect");
                 }

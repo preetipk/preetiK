@@ -1,13 +1,13 @@
-// app.factory('authFact', [function() {
-//     var authFact = {};
+app.factory('authFact', [function() {
+    var authFact = {};
 
-//     authFact.setAccessTocken = function(accessTocken) {
-//         authFact.authTocken = accessTocken;
-//     };
+    authFact.setAccessTocken = function(accessTocken) {
+        authFact.authTocken = accessTocken;
+    };
 
-//     authFact.getAccessTocken = function() {
-//         return authFact.authTocken;
-//     };
+    authFact.getAccessTocken = function() {
+        return authFact.authTocken;
+    };
 
-//     return authFact;
-// }]);
+    return authFact;
+}]);

@@ -96,7 +96,7 @@ app.post('/login', function(req, res) {
 
                 console.log("data=" + data);
                 if (data.length > 0) {
-                    req.session.docs = docs;
+                    req.session.data = data;
                     console.log(" post session=" + req.session.docs);
                     callback('User exist')
                 } else {
@@ -201,11 +201,11 @@ app.get('/logout', function(req, res) {
 })
 
 
-app.use('/user', function(err, req, res, next) {
-    console.log(err);
-    //User should be authenticated! Redirect him to log in.
-    res.redirect('/');
-});
+// app.use('/user', function(err, req, res, next) {
+//     console.log(err);
+//     //User should be authenticated! Redirect him to log in.
+//     res.redirect('/');
+// });
 //put for deactivation
 app.put("/users/:_id", function(req, res) {
     // var email = req.params.email;
