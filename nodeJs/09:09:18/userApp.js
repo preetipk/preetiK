@@ -13,6 +13,8 @@ var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
+
+
 mongoose.connect('mongodb://localhost:27017/users');
 var db = mongoose.connection;
 
@@ -31,7 +33,6 @@ app.get('/user', function(req, res) {
     async.series([
         function(callback) {
             User.find({ $or: [{ status: 'activated' }, { status: "deactivated" }] }, function(err, docs) {
-
                 //console.log(docs);
                 callback(null, docs);
             })
@@ -53,7 +54,6 @@ app.post('/user', function(req, res) {
     console.log("data=" + JSON.stringify(data));
 
     async.series([
-
         function(callback) {
             User.find({ "email": email }, function(err, docs) {
                 if (docs.length !== 0) {
@@ -82,47 +82,40 @@ app.post('/user', function(req, res) {
     })
 })
 
-app.post('/login', function(req, res) {
-    console.log("in post controller");
-    let email = req.body.email;
-    let password = req.body.password;
-    let data = req.body;
-    data.status = "activated";
 
-    async.series([
+app.post("/", function(req, res) {
+    req.session.email = req.body.email;
+    console.log("req.sess.email=" + req.session.email);
 
-        function(callback) {
-            User.find({ $and: [{ "email": email }, { "password": password }] }, function(err, data) {
+    console.log("inside login connect.js user app")
+    console.log("email=" + req.body.email);
+    console.log("pwd=" + req.body.password);
 
-                console.log("data=" + data);
-                if (data.length > 0) {
-                    req.session.data = data;
-                    console.log(" post session=" + req.session.docs);
-                    callback('User exist')
-                } else {
-                    //req.session.docs = docs;
-                    callback("user not found")
-                }
-            })
-        },
-        // function(callback) {
-        //     let user = new User(data);
-        //     user.save(function(err) {
-        //         if (err) {
-        //             console.log(err);
-        //         } else {
-        //             callback(null, "User is added");
-        //         }
-        //     })
-        // }
-    ], function(error, data) {
-        if (error) {
-            res.send(error);
-        } else {
-            res.send(data);
-        }
-    })
+    if (!req.body.email || !req.body.password) {
+        res.status("400");
+        res.send("Invalid details!");
+    } else {
+        User.find({ $and: [{ "email": req.body.email }, { "password": req.body.password }] }, function(err, docs) {
+            console.log("leng=" + docs.length);
+            if (docs.length > 0) {
+                req.session.docs = docs;
+                console.log(" post session=" + req.session.docs);
+                res.send("User exist")
+                    // res.redirect('#!user');
+            } else {
+                var data = { "msg": "invalid credentials" };
+                req.session.docs = docs;
+                console.log(" post fail session=" + req.session.docs);
+                console.log("invalid cond login=" + docs.length);
+                // res.send("/");
+                res.status("400");
+                res.redirect('/');
+            }
+        });
+    }
 })
+
+
 
 app.get('/user/:id', function(req, res) {
     var id = req.params.id;
@@ -194,18 +187,19 @@ app.put('/user/:id', function(req, res) {
 
 app.get('/logout', function(req, res) {
     req.session.destroy(function() {
-        console.log("user logged out.")
-        res.redirect('/');
+        console.log("user logged out.");
     });
-
+    res.redirect('/');
 })
 
 
 // app.use('/user', function(err, req, res, next) {
 //     console.log(err);
-//     //User should be authenticated! Redirect him to log in.
+//     //Redirect to log in.
 //     res.redirect('/');
 // });
+
+
 //put for deactivation
 app.put("/users/:_id", function(req, res) {
     // var email = req.params.email;
@@ -434,7 +428,7 @@ app.put("/companiess/:_id", function(req, res) {
             })
         }
     })
-})
+});
 app.get("/company/:id", function(req, res) {
     var id = req.params.id;
     console.log("inside connect.js cmp app for edit" + id)
@@ -442,7 +436,7 @@ app.get("/company/:id", function(req, res) {
         console.log("data=" + docs);
         res.send(docs);
     });
-})
+});
 app.put('/company/:id', function(req, res) {
     console.log("in connect for update=");
     let id = req.params.id;

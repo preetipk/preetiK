@@ -1,4 +1,4 @@
-app.controller("userController", ['$scope', '$http', '$location', function($scope, $http, $location) {
+app.controller("userController", ['$scope', '$http', '$location', 'userModel', function($scope, $http, $location, userModel) {
 
     var refresh = function() {
         $http.get('/user').then(function(response) {
@@ -148,6 +148,7 @@ app.controller("userController", ['$scope', '$http', '$location', function($scop
             .then(function(response) {
                     console.log("user logout ");
                     console.log(response);
+                    userModel.dologout();
                     $location.path('/');
                 },
                 function(response) {
