@@ -20,15 +20,16 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
     $scope.popup1 = {
         opened: false
     };
-    $scope.adduser = function() {
+
+
+    $scope.confirm = function() {
         $scope.login = 1
         console.log("adding user");
         $scope.data = {}
-        $scope.data.userEmail = $scope.userEmail;
-        $scope.data.noOfSeats = $scope.noOfSeats;
-        $scope.data.arrivalTime = $scope.arrivalTime;
-        console.log("passwors" + $scope.password);
-        $scope.data.departureTime = $scope.departureTime;
+        $scope.data.email = $scope.email;
+        $scope.data.bdate = $scope.bdate;
+        $scope.data.btime = $scope.btime;
+        $scope.data.trainNumber = $scope.trainNumber;
 
         console.log("dshg=" + $scope.trainNo);
 
@@ -38,86 +39,64 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
             .then(function(response) {
                 console.log("in post controller");
 
-                if (response.data == 'User is  already exist') {
-                    alert("email is already exist");
+                if (response.data == 'Booking is not available') {
+                    alert("Booking is Full");
+                } else if (ValidationError) {
+                    alert("Booking date should be greater than or equal to todays date")
+                } else {
+                    alert("are sure... do U want confirm booking?")
                 }
                 refresh();
             });
-
-
     };
 
-    // $scope.edit = function(id) {
-    //     _id = id;
-    //     console.log("id=" + _id);
-    //     $http.get("/user/" + id)
-    //         .then(function(response) {
+    $scope.booking = function(id) {
+        _id = id;
+        console.log("id=" + _id);
+        $http.get("/trains/" + id)
+            .then(function(response) {
+                    if (response) {
+                        $scope.trainlist = response;
+                        console.log("res-data=" + $scope.trainlist);
+                    }
+                    $scope.trainNumber = response.data[0].trainNumber;
+                    console.log("trainNumber=" + $scope.trainNumber);
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
+        $scope.bookTrain();
+    }
 
-    //                 if (response) {
-    //                     $scope.userlist = response;
-    //                     console.log("res-data=" + $scope.userlist);
-    //                 }
-    //                 $scope.email = response.data[0].email;
-    //                 console.log("email=" + $scope.email);
+    $scope.bookTrain = function(trainNumber) {
+        console.log("id in login to update=" + _id);
+        //console.log("name in ctrl to update=" + $scope.username);
+        var data = {
+            "trainNumber": trainNumber,
+        };
 
-    //                 $scope.username = response.data[0].userInfo.username;
-    //                 console.log("userName=" + $scope.username);
+        var trainNumber = $scope.trainNumber;
+        console.log("trainNumber=" + trainNumber);
 
-    //                 $scope.address = response.data[0].userInfo.address;
-    //                 console.log("address=" + $scope.address);
-
-    //                 $scope.password = response.data[0].password;
-    //                 console.log("password=" + $scope.password);
-    //             },
-    //             function(response) {
-    //                 $scope.msg = "error occur";
-    //             })
-    //     $scope.updateUser();
-    // }
-
-    // $scope.updateUser = function(email, username, address, password) {
-    //     console.log("id in login to update=" + _id);
-    //     //console.log("name in ctrl to update=" + $scope.username);
-    //     var data = {
-    //         "email": email,
-    //         "userInfo": {
-    //             "username": username,
-    //             "address": address,
-    //         },
-    //         "password": password
-    //     };
-
-    //     var emai = $scope.email;
-    //     console.log("email=" + emai);
-    //     var Email = data.email;
-    //     console.log("email from database=" + Email);
-
-    //     $http.put("/user/" + _id, data)
-    //         .then(function(response) {
-    //                 if (response !== null) {
-    //                     if (data.email != Email) {
-    //                         alert("email should not be change");
-    //                     } else {
-    //                         console.log("resp=" + response);
-    //                         $scope.msg = "data posted ...."
-    //                         refresh();
-    //                     }
-    //                 }
-    //             },
-    //             function(response) {
-    //                 $scope.msg = "error occur";
-    //             })
+        $http.put("/trains/" + _id, data)
+            .then(function(response) {
+                    if (response !== null) {
+                        console.log("resp=" + response);
+                        $scope.msg = "data posted ...."
+                        refresh();
+                    }
+                },
+                function(response) {
+                    $scope.msg = "error occur";
+                })
 
 
-    //     $scope.isDisabled = false;
+        $scope.isDisabled = false;
 
-    //     $scope.edit = function() {
-    //         $scope.isDisabled = !$scope.isDisabled;
-    //     }
-    // }
-
-
-
+        $scope.booking = function() {
+            $scope.isDisabled = !$scope.isDisabled;
+        }
+    }
 
     // $scope.logout = function() {
     //     console.log("in user logout");
@@ -132,9 +111,5 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
     //                 $scope.status = response.status;
     //             });
     // }
-
-
-
-
 
 }]);

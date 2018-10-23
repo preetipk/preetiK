@@ -12,6 +12,12 @@ app.config(function($routeProvider) {
         authenticated: true
     })
 
+    .when('/bookingDetails', {
+        templateUrl: 'bookingDetails.html',
+        controller: 'bookingController',
+        authenticated: true
+    })
+
     .otherwise({
         template: "<h1>None</h1><p>Content Not Found</p>"
     });

@@ -5,7 +5,7 @@ app.use(express.json());
 var bodyParser = require('body-parser');
 const User = require('./userSchema');
 const Train = require('./trainSchema');
-
+const Booking = require('./bookingSchema');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,11 +28,6 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(cookieParser());
 app.use(session({ secret: "Your secret key", cookie: { maxAge: 3600000 }, saveUninitialized: true, resave: true }));
-
-
-
-
-
 
 app.post("/", function(req, res) {
     req.session.email = req.body.email;
@@ -73,44 +68,48 @@ app.post('/trains', function(req, res) {
     console.log("in post controller");
     //let noOfSeats = req.body.noOfSeats;
     let data = req.body;
+    data.status = "booked";
 
     console.log("data=" + JSON.stringify(data));
 
     async.series([
-        function(callback) {
-            Train.find({ noOfSeats }, function(err, docs) {
-                if (docs.length !== 0) {
-                    callback('User is  already exist');
-                } else {
-                    callback()
-                }
-            })
-        },
-        function(callback) {
-            let trains = new Train(data);
-            trains.save(function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    callback(null, "User is added");
-                }
-            })
-        }
-    ], function(error, data) {
-        if (error) {
-            res.send(error);
-        } else {
-            res.send(data[1]);
-        }
-    })
+            function(callback) {
+                Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] },
+                    function(err, docs) {
+                        if (docs.length !== 0) {
+                            console.log("documents=" + docs)
+                            callback();
+                        } else {
+                            callback("Booking is not available")
+                        }
+                    })
+            },
+            function(callback) {
+                let bookingData = new Booking(data);
+                bookingData.save(function(err) {
+                    if (err) {
+                        console.log("error=" + err);
+                    } else {
+                        callback(null, "Booking Done");
+                    }
+                })
+            }
+        ],
+        function(error, data) {
+            if (error) {
+                res.send("error=" + error);
+            } else {
+                res.send(data[1]);
+            }
+        })
 })
 
 
 app.get('/trains', function(req, res) {
-    console.log("console.log calling get");
+    console.log("calling get");
     async.series([
         function(callback) {
-            Train.find({}, function(err, docs) {
+            Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] }, function(err, docs) {
                 //console.log(docs);
                 callback(null, docs);
             })
@@ -134,7 +133,70 @@ app.get('/trains', function(req, res) {
 //     })
 // })
 
+app.get('/trains/:id', function(req, res) {
+    var id = req.params.id;
+    console.log("id=" + id);
+    Train.find({ "_id": mongoose.Types.ObjectId(id) }, function(err, data) {
+        console.log("data=" + data);
+        res.send(data);
+    })
+})
 
+app.put('/trains/:id', function(req, res) {
+    console.log("in update ");
+    let id = req.params.id;
+    var data = req.body;
+    console.log("user=" + JSON.stringify(data));
+    console.log("user data=" + data.noOfSeats);
+
+    console.log("id=" + id);
+    // console.log("name in connect for update=" + user.firstName);
+    console.log("name=" + req.body.username);
+
+    async.series([
+            function(callback) {
+                Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] },
+                    function(err, data) {
+                        console.log("data=" + data);
+                        if (data.length > 0) {
+                            callback()
+                        } else {
+                            callback('Data not found to Update');
+                        }
+                    })
+            },
+            function(callback) {
+                console.log("reduce seat no");
+                Train.updateOne({ "_id": req.params.id }, { $inc: { noOfSeats: (-1) } },
+                    function(err) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        } else {
+                            callback()
+                        }
+                    })
+            },
+            function(callback) {
+                Train.find({ '_id': id },
+                    function(err, docs) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        } else {
+                            callback(null, docs)
+                        }
+                    })
+            },
+        ],
+        function(error, data) {
+            if (error) {
+                res.send(error);
+            } else {
+                res.send(data[2]);
+            }
+        })
+})
 
 
 //logout
@@ -146,7 +208,23 @@ app.get('/logout', function(req, res) {
 })
 
 
-
+app.get('/bookingDetails', function(req, res) {
+    console.log("calling get");
+    async.series([
+        function(callback) {
+            Booking.find({}, function(err, docs) {
+                //console.log(docs);
+                callback(null, docs);
+            })
+        }
+    ], function(error, data) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(data);
+        }
+    })
+})
 
 
 
