@@ -10,17 +10,17 @@ var Schema = new mongoose.Schema({
         }
     },
     bdate: {
-        type: Date,
-        validate: [dateValidator, 'Date must be greater than current dates']
+        type: Date
     },
     btime: { type: String },
     trainNumber: Number,
     status: String
 });
 
-function dateValidator(value) {
-    // `this` is the mongoose document
-    return this.bdate >= Date.now();
-}
+// function dateValidator(value) {
+//     // `this` is the mongoose document
+//     return this.bdate === Date.toString('YYYY-MM-DD');
+
+// }
 
 module.exports = mongoose.model("Booking", Schema);

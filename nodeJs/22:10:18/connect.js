@@ -69,6 +69,10 @@ app.post('/trains', function(req, res) {
     //let noOfSeats = req.body.noOfSeats;
     let data = req.body;
     data.status = "booked";
+    var timeInMss = new Date();
+    var date = timeInMss.toISOString();
+    console.log("timestamp=" + date);
+
 
     console.log("data=" + JSON.stringify(data));
 

@@ -11,7 +11,12 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
 
     refresh();
 
-
+    $scope.options = {
+        minDate: Date.now(),
+        minDateChange: date => {
+            $scope.options2.minDate = date;
+        }
+    };
 
     $scope.open1 = function() {
         $scope.popup1.opened = true;
@@ -38,13 +43,11 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
         $http.post('/trains', $scope.data)
             .then(function(response) {
                 console.log("in post controller");
-
                 if (response.data == 'Booking is not available') {
                     alert("Booking is Full");
-                } else if (ValidationError) {
-                    alert("Booking date should be greater than or equal to todays date")
+
                 } else {
-                    alert("are sure... do U want confirm booking?")
+                    alert("are U sure... do U want confirm booking?")
                 }
                 refresh();
             });
@@ -65,7 +68,8 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
                 function(response) {
                     $scope.msg = "error occur";
                 })
-        $scope.bookTrain();
+        refresh();
+        // $scope.bookTrain();
     }
 
     $scope.bookTrain = function(trainNumber) {
@@ -89,8 +93,6 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
                 function(response) {
                     $scope.msg = "error occur";
                 })
-
-
         $scope.isDisabled = false;
 
         $scope.booking = function() {
@@ -98,18 +100,18 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
         }
     }
 
-    // $scope.logout = function() {
-    //     console.log("in user logout");
-    //     $http.get("/logout")
-    //         .then(function(response) {
-    //                 console.log("user logout ");
-    //                 console.log(response);
-    //                 userModel.dologout();
-    //                 $location.path('/');
-    //             },
-    //             function(response) {
-    //                 $scope.status = response.status;
-    //             });
-    // }
+    $scope.logout = function() {
+        console.log("in user logout");
+        $http.get("/logout")
+            .then(function(response) {
+                    console.log("user logout ");
+                    console.log(response);
+                    userModel.dologout();
+                    $location.path('/');
+                },
+                function(response) {
+                    $scope.status = response.status;
+                });
+    }
 
 }]);

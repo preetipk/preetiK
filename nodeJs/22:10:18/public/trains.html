@@ -32,9 +32,12 @@
                     <div class="form-group">
                         <label>Booking Date</label>
                         <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="bdate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="bdate" is-open="popup1.opened" datepicker-options="minDate" ng-required="true" uib-datepicker-popup="MM-dd-yyyy" close-text="Close" alt-input-formats="altInputFormats"
+                            />
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                              <button type="button" class="btn btn-default"   ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                              <span ng-show="userForm.$dirty && userForm.bdate.$error.required">Booking Date is required field</span>
+                            <!-- <span ng-show="userForm.$dirty && userForm.bdate.$invalid">Enter a valid e</span> -->
                             </span>
                         </p>
                     </div>
@@ -56,9 +59,9 @@
                     </div>
 
                     <!-- <button type="submit" ng-disabled="!userForm.$valid" name="update" class="btn btn-primary" value="update" ng-click="updateUser(email, username, address, password)"> -->
-                    <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" name="update" value="update" ng-click="bookTrain(trainNumber)">Book</button>
+                    <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" name="update" value="update" ng-click="bookTrain(trainNumber);confirm()">Book</button>
 
-                    <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" ng-click="confirm()">Confirm Booking</button>
+                    <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
             </form>
             </div>
         </div>
