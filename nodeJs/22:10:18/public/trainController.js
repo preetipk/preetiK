@@ -11,20 +11,65 @@ app.controller("trainController", ['$scope', '$http', '$location', 'userModel', 
 
     refresh();
 
-    $scope.options = {
-        minDate: Date.now(),
-        minDateChange: date => {
-            $scope.options2.minDate = date;
-        }
+    // $scope.options = {
+    //     minDate: Date.now(),
+    //     minDateChange: date => {
+    //         $scope.options2.minDate = date;
+    //     }
+    // };
+
+
+    $scope.today = function() {
+        $scope.bdate = new Date();
     };
+    $scope.today();
+
+    $scope.toggleMin = function() {
+        console.log("calling min date function");
+        $scope.minDate = $scope.minDate ? null : new Date();
+        console.log("mindate=" + $scope.minDate);
+    };
+
+    $scope.toggleMin();
+    // $scope.maxDate = new Date(2020, 5, 22);
 
     $scope.open1 = function() {
         $scope.popup1.opened = true;
     };
 
+    $scope.setDate = function(year, month, day) {
+        $scope.bdate = new Date(year, month, day);
+    };
+
+    // $scope.dateOptions = {
+    //     formatYear: 'yy',
+    //     startingDay: 1
+    // };
+
+    // $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    // $scope.format = $scope.formats[0];
+
     $scope.popup1 = {
         opened: false
     };
+
+
+
+    // var tomorrow = new Date();
+    // tomorrow.setDate(tomorrow.getDate() + 1);
+    // var afterTomorrow = new Date();
+    // afterTomorrow.setDate(tomorrow.getDate() + 1);
+    // $scope.events = [{
+    //         date: tomorrow,
+    //         status: 'full'
+    //     },
+    //     {
+    //         date: afterTomorrow,
+    //         status: 'partially'
+    //     }
+    // ];
+
+
 
 
     $scope.confirm = function() {

@@ -28,82 +28,91 @@
                     <span ng-show="userForm.$dirty && userForm.email.$invalid">Enter a valid email</span>
                 </div>
 
-                <div class="">
-                    <div class="form-group">
-                        <label>Booking Date</label>
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="bdate" is-open="popup1.opened" datepicker-options="minDate" ng-required="true" uib-datepicker-popup="MM-dd-yyyy" close-text="Close" alt-input-formats="altInputFormats"
-                            />
-                            <span class="input-group-btn">
+
+                <div class="form-group">
+                    <label>Booking Date</label>
+                    <!-- <p class="input-group">
+                        <input type="date" class="form-control" uib-datepicker-popup ng-model="bdate" is-open="popup1.opened"   min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" uib-datepicker-popup="dd-MM-yyyy" close-text="Close" />
+                        <span class="input-group-btn">
                               <button type="button" class="btn btn-default"   ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                               <span ng-show="userForm.$dirty && userForm.bdate.$error.required">Booking Date is required field</span>
-                            <!-- <span ng-show="userForm.$dirty && userForm.bdate.$invalid">Enter a valid e</span> -->
-                            </span>
-                        </p>
-                    </div>
+                        <!-- <span ng-show="userForm.$dirty && userForm.bdate.$invalid">Enter a valid e</span> -->
+                    <!-- </span> -->
+                    <!-- </p> -->
 
-                    <!-- Booking Time -->
-                    <div class="form-group" ng-class="{ 'has-error' : userForm.btime.$invalid && (userForm.btime.$dirty || submitted)}">
-                        <label>Booking Time</label>
-                        <input name="btime" class="form-control" ng-model="btime" placeholder="Booking Time" ng-required="true">
-                        <span ng-show="userForm.$dirty && userForm.btime.$error.required">Time is required field</span>
-                        <!-- <span ng-show="userForm.$dirty && userForm.btime.$invalid">Enter a valid email</span><br/><br/> -->
-                    </div>
+                    <!-- <div class="col-md-6"> -->
+                    <p class="input-group">
+                        <input type="date" class="form-control" uib-datepicker-popup ng-model="bdate" is-open="popup1.opened" min-date="minDate" max-date="maxDate" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                    </p>
+                </div>
 
-                    <!-- Train Number -->
-                    <div class="form-group" ng-class="{ 'has-error' : userForm.trainNumber.$invalid && (userForm.trainNumber.$dirty || submitted)}">
-                        <label>Train Number</label>
-                        <input name="trainNumber" class="form-control" ng-model="trainNumber" placeholder="Train Number" ng-required="true">
-                        <span ng-show="userForm.$dirty && userForm.trainNumber.$error.required">Time is required field</span>
-                        <!-- <span ng-show="userForm.$dirty && userForm.btime.$invalid">Enter a valid email</span><br/><br/> -->
-                    </div>
+                <!-- </div> -->
 
-                    <!-- <button type="submit" ng-disabled="!userForm.$valid" name="update" class="btn btn-primary" value="update" ng-click="updateUser(email, username, address, password)"> -->
-                    <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" name="update" value="update" ng-click="bookTrain(trainNumber);confirm()">Book</button>
+                <!-- Booking Time -->
+                <div class="form-group" ng-class="{ 'has-error' : userForm.btime.$invalid && (userForm.btime.$dirty || submitted)}">
+                    <label>Booking Time</label>
+                    <input name="btime" class="form-control" ng-model="btime" placeholder="Booking Time" ng-required="true">
+                    <span ng-show="userForm.$dirty && userForm.btime.$error.required">Time is required field</span>
+                    <!-- <span ng-show="userForm.$dirty && userForm.btime.$invalid">Enter a valid email</span><br/><br/> -->
+                </div>
 
-                    <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
+                <!-- Train Number -->
+                <div class="form-group" ng-class="{ 'has-error' : userForm.trainNumber.$invalid && (userForm.trainNumber.$dirty || submitted)}">
+                    <label>Train Number</label>
+                    <input name="trainNumber" class="form-control" ng-model="trainNumber" placeholder="Train Number" ng-required="true">
+                    <span ng-show="userForm.$dirty && userForm.trainNumber.$error.required">Time is required field</span>
+                    <!-- <span ng-show="userForm.$dirty && userForm.btime.$invalid">Enter a valid email</span><br/><br/> -->
+                </div>
+
+                <!-- <button type="submit" ng-disabled="!userForm.$valid" name="update" class="btn btn-primary" value="update" ng-click="updateUser(email, username, address, password)"> -->
+                <button type="submit" ng-disabled="!userForm.$valid" class="btn btn-primary" name="update" value="update" ng-click="bookTrain(trainNumber);confirm()">Book</button>
+
+                <button type="submit" class="btn btn-primary" ng-click="logout()">Logout</button>
             </form>
-            </div>
         </div>
+    </div>
 
 
-        <div class="col-sm-8 col-sm-offset-2">
-            <!-- Default panel contents -->
-            <br><br><br>
-            <div class="col-sm-8-heading"><span class="lead" align="center">List of Available Trains </span></div>
-            <div class="tablecontainer">
-                <table class="table table-hover" border=2 layout-margin="20px" margin-right: "1.0">
-                    <div>
-                        <thead>
-                            <tr>
-                                <th>train No</th>
-                                <th>id</th>
-                                <th>Available Seates</th>
-                                <th>Arrival Time</th>
-                                <th>Departure Time</th>
-                                <th colspan="1">Book</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="value in trainlist[0]">
-                                <td>{{value.trainNumber}}</td>
-                                <td>{{value._id}}</td>
-                                <td>{{value.noOfSeats}}</td>
-                                <td>{{value.arrivalTime}}</td>
-                                <td>{{value.departureTime}}</td>
-                                <td>
-                                    <a href ng-click="booking(value._id)"><i class="glyphicon glyphicon-registration-mark"></i>Booking</a>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                </table>
-                </div>
+    <div class="col-sm-8 col-sm-offset-2">
+        <!-- Default panel contents -->
+        <br><br><br>
+        <div class="col-sm-8-heading"><span class="lead" align="center">List of Available Trains </span></div>
+        <div class="tablecontainer">
+            <table class="table table-hover" border=2 layout-margin="20px" margin-right: "1.0">
                 <div>
-                    <h1><a href="#!/bookingDetails" style="color:black" align="center"><i class="glyphicon glyphicon-forward form-control-feedback"></i></a>Booking Details</h1>
-                </div>
+                    <thead>
+                        <tr>
+                            <th>train No</th>
+                            <th>id</th>
+                            <th>Available Seates</th>
+                            <th>Arrival Time</th>
+                            <th>Departure Time</th>
+                            <th colspan="1">Book</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="value in trainlist[0]">
+                            <td>{{value.trainNumber}}</td>
+                            <td>{{value._id}}</td>
+                            <td>{{value.noOfSeats}}</td>
+                            <td>{{value.arrivalTime}}</td>
+                            <td>{{value.departureTime}}</td>
+                            <td>
+                                <a href ng-click="booking(value._id)"><i class="glyphicon glyphicon-registration-mark"></i>Booking</a>
+                            </td>
+
+                        </tr>
+                    </tbody>
+            </table>
+            </div>
+            <div>
+                <h1><a href="#!/bookingDetails" style="color:black" align="center"><i class="glyphicon glyphicon-forward form-control-feedback"></i></a>Booking Details</h1>
             </div>
         </div>
+    </div>
     </div>
 
 </body>
