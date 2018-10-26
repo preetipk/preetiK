@@ -111,65 +111,15 @@ app.post('/trains', function(req, res) {
 })
 
 
-// app.get('/trains', function(req, res) {
-//     console.log("calling get");
-//     async.series([
-//         function(callback) {
-//             Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] }, function(err, docs) {
-//                 //console.log(docs);
-//                 callback(null, docs);
-//             })
-//         }
-//     ], function(error, data) {
-//         if (error) {
-//             res.send(error);
-//         } else {
-//             res.send(data);
-//         }
-//     })
-// })
-
-
-app.get('/trains', function(err, res, body) {
+app.get('/trains', function(req, res) {
     console.log("calling get");
+    trainFind().then(function(result) {
+        res.send(result);
+    })
 
-    let promise = new Promise(function(resolve, reject) {
-        async.series([
-            function(callback) {
-                Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] }, function(err, docs) {
-                    //console.log(docs);
-                    callback(null, docs);
-                })
-            }
-        ], function(error, data) {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(res.send(data));
-            }
-        })
-    });
-
-    // promise.then(
-    //     resolve => console.log(resolve), // doesn't run
-    //     reject => console.log(reject) // shows "Error: Whoops!" after 1 second
-    // );
-
-    // async.series([
-    //     function(callback) {
-    //         Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] }, function(err, docs) {
-    //             //console.log(docs);
-    //             callback(null, docs);
-    //         })
-    //     }
-    // ], function(error, data) {
-    //     if (error) {
-    //         res.send(error);
-    //     } else {
-    //         res.send(data);
-    //     }
-    // })
 })
+
+
 
 
 
@@ -183,6 +133,50 @@ app.get('/trains/:id', function(req, res) {
     })
 })
 
+//find the train info having available seats more than 0s
+var trainFind = function() {
+    return new promise(function(resolve, reject) {
+        Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] },
+            function(err, data) {
+                console.log("data=" + data);
+                if (data.length > 0) {
+                    resolve()
+                } else {
+                    reject('Data not found to Update');
+                }
+            })
+    })
+
+}
+
+//update bookings
+var trainUpdate = function() {
+    return new promise(function(resolve, reject) {
+        Train.updateOne({ "_id": req.params.id }, { $inc: { noOfSeats: (-1) } },
+            function(err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve()
+                }
+            })
+    })
+}
+
+//find the updated part
+var finalFind = function() {
+    return new promise(function(resolve, reject) {
+        Train.find({ '_id': id },
+            function(err, docs) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(null, docs)
+                }
+            })
+    })
+}
+
 app.put('/trains/:id', function(req, res) {
     console.log("in update ");
     let id = req.params.id;
@@ -194,52 +188,7 @@ app.put('/trains/:id', function(req, res) {
     // console.log("name in connect for update=" + user.firstName);
     console.log("name=" + req.body.username);
 
-    let trainFind = function() {
-        return new promise(function(resolve, reject) {
-            Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] },
-                function(err, data) {
-                    console.log("data=" + data);
-                    if (data.length > 0) {
-                        resolve()
-                    } else {
-                        reject('Data not found to Update');
-                    }
-                })
-        })
-
-    }
-
-
-    let trainUpdate = function() {
-        return new promise(function(resolve, reject) {
-            Train.updateOne({ "_id": req.params.id }, { $inc: { noOfSeats: (-1) } },
-                function(err) {
-                    if (err) {
-                        reject(err);
-
-                    } else {
-                        resolve()
-                    }
-                })
-        })
-    }
-
-
-    let finalFind = function() {
-        return new promise(function(resolve, reject) {
-            Train.find({ '_id': id },
-                function(err, docs) {
-                    if (err) {
-                        reject(err);
-                        return;
-                    } else {
-                        resolve(null, docs)
-                    }
-                })
-        })
-    }
-
-
+    //calling promise
     trainFind().then(function(result) {
         return trainUpdate(res.send(result));
     }).then(function(result) {
@@ -248,60 +197,6 @@ app.put('/trains/:id', function(req, res) {
         res.send(result);
     })
 
-
-
-
-
-
-
-
-
-
-
-
-    // async.series([
-    //         function(callback) {
-    //             Train.find({ "$nor": [{ "noOfSeats": { "$lte": 0 } }] },
-    //                 function(err, data) {
-    //                     console.log("data=" + data);
-    //                     if (data.length > 0) {
-    //                         callback()
-    //                     } else {
-    //                         callback('Data not found to Update');
-    //                     }
-    //                 })
-    //         },
-    //         function(callback) {
-    //             console.log("reduce seat no");
-    //             Train.updateOne({ "_id": req.params.id }, { $inc: { noOfSeats: (-1) } },
-    //                 function(err) {
-    //                     if (err) {
-    //                         console.log(err);
-    //                         return;
-    //                     } else {
-    //                         callback()
-    //                     }
-    //                 })
-    //         },
-    //         function(callback) {
-    //             Train.find({ '_id': id },
-    //                 function(err, docs) {
-    //                     if (err) {
-    //                         console.log(err);
-    //                         return;
-    //                     } else {
-    //                         callback(null, docs)
-    //                     }
-    //                 })
-    //         },
-    //     ],
-    //     function(error, data) {
-    //         if (error) {
-    //             res.send(error);
-    //         } else {
-    //             res.send(data[2]);
-    //         }
-    //     })
 })
 
 
