@@ -33,8 +33,7 @@ app.post('/newUser', function(req, res) {
     console.log("calling post method");
     let newUser = new user(req.body);
     newUser.status = "activated";
-    //var allUsers = req.body;
-    // newUser = allUsers;
+
     console.log("new user=" + newUser);
     email = req.body.email;
     console.log("email=" + email);
@@ -46,7 +45,6 @@ app.post('/newUser', function(req, res) {
                 console.log("data=" + JSON.stringify(data));
                 if (err) {
                     console.log(err);
-
                 } else if (data.length !== 0) {
                     callback("data already exist");
                 } else {
@@ -62,7 +60,6 @@ app.post('/newUser', function(req, res) {
                 } else {
                     console.log(data);
                     callback("data inserted successfully");
-
                 }
             })
         }
@@ -80,8 +77,6 @@ app.put('/UpdatesById/:id', function(req, res) {
     let newUser = req.body;
     var id = req.params.id;
     //console.log("company_name=" + company_name);
-
-
     console.log("new user=" + JSON.stringify(newUser));
 
     async.series([
@@ -96,8 +91,6 @@ app.put('/UpdatesById/:id', function(req, res) {
                     callback("user not exist in records");
                 }
             })
-
-
         },
         function(callback) {
             user.updateOne({ "_id": id }, newUser, function(err) {
@@ -134,8 +127,6 @@ app.put('/UpdatesByEmail/:email', function(req, res) {
     newUsers.userInfo.address = allUser.userInfo.address
 
     console.log("all users=" + newUsers);
-
-
     console.log("new user=" + JSON.stringify(newUsers));
 
     async.series([
@@ -150,8 +141,6 @@ app.put('/UpdatesByEmail/:email', function(req, res) {
                     callback("user not exist in records");
                 }
             })
-
-
         },
         function(callback) {
             user.updateOne({ "email": email }, newUsers, function(err) {
@@ -180,7 +169,6 @@ app.put('/UpdatesStatus/:id', function(req, res) {
     var id = req.params.id;
     console.log("email=" + id);
 
-
     async.series([
         function(callback) {
             user.findOne({ $and: [{ $or: [{ "email": id }, { "_id": id }] }, { $not: { "status": "deleted" } }] }, function(err, data) {
@@ -193,8 +181,6 @@ app.put('/UpdatesStatus/:id', function(req, res) {
                     callback("user not exist in records");
                 }
             })
-
-
         },
         function(callback) {
             user.updateOne({ $or: [{ "email": id }, { "_id": id }] }, { $set: { "status": "activated" } }, newUsers, function(err) {

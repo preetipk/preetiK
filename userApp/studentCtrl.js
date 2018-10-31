@@ -1,4 +1,4 @@
-app.controller("studentCtrl",['$scope',"userService",function($scope,userService){
+app.controller("studentCtrl",['$scope',"userService","$rootScope",function($scope,userService,$rootScope){
   
   $scope.studentInfo={};
 
@@ -28,40 +28,22 @@ app.controller("studentCtrl",['$scope',"userService",function($scope,userService
     opened: false
   };
 
-  $scope.submitForm = function () {
- 
-    // Set the 'submitted' flag to true
-    $scope.submitted = true;
+
+
+// $scope.$on('eventName', function (event, args) {
+
+//     $rootscope.students = args.studentInfo;
+//     console.log("hello");
     
-    if ($scope.userForm.$valid) {
-    alert("Form is valid!");
-    }
-    else {
-    alert("Please correct errors!");
-    }
-    };
-   
-    $scope.userForm = {}
-    $scope.submitForm = function () {
-        if ($scope.form.userForm.$valid) {
-            console.log('user form is in scope');
-            $modalInstance.close('closed');
-        } else {
-            console.log('userform is not in scope');
-        }
-    };
+//     })
+   $scope.save = function(){
 
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-
-    
         $scope.studentInfo.fName = $scope.fName;
         $scope.studentInfo.lName = $scope.lName;
         $scope.studentInfo.class = $scope.class;
         $scope.studentInfo.grade = $scope.grade;
-
         console.log($scope.studentInfo);
-    //$scope.studentInfo = sharedDataServices;
-}]);
+  
+        userService.setStudent($scope.studentInfo);
+    }
+  }]);

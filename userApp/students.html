@@ -51,13 +51,13 @@
 
 								<div class="form-group" ng-class="{ 'has-error' : userForm.fName.$invalid && (userForm.fName.$dirty || submitted)}">
 									<label>First Name</label>
-									<input type="text" name="fName" class="form-control" ng-model="user.fName" placeholder="First Name" ng-required="true">
+									<input type="text" name="fName" class="form-control" ng-model="fName" placeholder="First Name" ng-required="true">
 									<p ng-show="userForm.fName.$error.required && (userForm.fName.$dirty || submitted)" class="help-block">First name is required.</p>
 								</div>
 
 								<div class="form-group" ng-class="{ 'has-error' : userForm.lName.$invalid && (userForm.lName.$dirty || submitted)}">
 									<label>Last Name</label>
-									<input type="text" name="lName" class="form-control" ng-model="user.lName" placeholder="Last Name" ng-required="true">
+									<input type="text" name="lName" class="form-control" ng-model="lName" placeholder="Last Name" ng-required="true">
 									<p ng-show="userForm.lName.$error.required && (userForm.lName.$dirty || submitted)" class="help-block">Last name is required.</p>
 								</div>
 
@@ -65,7 +65,7 @@
 										<div class="form-group">
 											<label>Date Of birth</label>
 										  <p class="input-group">
-											<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+											<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
 											<span class="input-group-btn">
 											  <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
 											</span>
@@ -75,7 +75,7 @@
 								<div class="form-group" ng-class="{ 'has-error' : userForm.class.$invalid && (userForm.class.$dirty || submitted)}">
 									<label>Class</label>
 									<select name="class" class="form-control"
-									ng-model="user.country"
+									ng-model="class"
 									ng-options="class.classId as class.Name for class in classList"
 									ng-required="true">
 									<option value=''>Select</option>
@@ -86,7 +86,7 @@
 								 <div class="form-group" ng-class="{ 'has-error' : userForm.grade.$invalid && (userForm.grade.$dirty || submitted)}">
 									<label>Grade</label>
 									<select name="grade" class="form-control"
-									ng-model="user.grade"
+									ng-model="grade"
 									ng-options="grade.gradeId as grade.Name for grade in gradeList"
 									ng-required="true">
 									<option value=''>Select</option>
@@ -94,17 +94,13 @@
 									<p ng-show="userForm.grade.$error.required && (userForm.grade.$dirty || submitted)" class="help-block">Select grade.</p>
 									</div>
 									<div class="modal-footer">
-											<button type="submit" class="btn btn-primary" ng-disabled="form.userForm.$invalid">OK</button>
+											<button type="submit" class="btn btn-primary" ng-disabled="form.userForm.$invalid" ng-click="save()" >OK</button>
 											<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 										</div>
 									
 						</form>
         
-                        <!-- </div>
-                        <div class="model-footer" id="model-footer">
-                            <button class="btn btn-primary">Submit</button>
-                            <button class="btn btn-primary" data-dismiss="model">close</button>
-                        </div> -->
+                       
                     </div>
                 </div>
             </div>
@@ -112,7 +108,7 @@
     </script>
 
 
-
+        <script src="userServices.js"></script>
         <script src="studentsCtrl.js"></script>
         <script src="studentCtrl.js"></script>
     </body>

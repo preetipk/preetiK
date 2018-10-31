@@ -1,8 +1,8 @@
-app.controller("studentsCtrl",["$scope","$uibModal","userService",function($scope,$uibModal,userService){
+app.controller("studentsCtrl",["$scope","$uibModal","userService","$rootScope",function($scope,$uibModal,userService,$rootScope){
 
   
     //console.log("inside students controller");
-
+    $scope.displayData=[];
      $scope.open=function(){
      
      var object=$uibModal.open({
@@ -20,17 +20,11 @@ app.controller("studentsCtrl",["$scope","$uibModal","userService",function($scop
      return object;
   
    }
+
+   $scope.$on("evntName",function(event,data){
+     $scope.displayData=$scope.getStudent();
+     console.log(displayData);
+   });
   
-      function getController(studentCtrl){
-          return function($scope){
-              $scope.$on("message",function(e,opt){
-                  console.log("controller" + studentCtrl+ "received message" + opt.message);
-              })
-
-              allScopes.studentsCtrl=$scope;
-          }
-      }
-
-     //$scope.studentInfo = sharedDataServices;
 
 }])

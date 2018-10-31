@@ -22,5 +22,8 @@ app.config(function ($routeProvider) {
         templateUrl: 'angularPromises/post.html',
         controller: 'postController'
     })
-    
+    .when('/posts', {
+        templateUrl: 'angularPromises/showData.html',
+        controller: 'postController'
+    })
 });

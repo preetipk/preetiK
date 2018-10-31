@@ -185,11 +185,6 @@ User.count({ status: 'activated' }, function(err, count) {
     console.log("No Of Records in users Schema:" + count);
 });
 
-// User.find(
-
-//     { score: { $meta: "textScore" } }
-// )
-
 
 //logout
 app.get('/logout', function(req, res) {
@@ -377,108 +372,106 @@ app.delete('/company/:id', function(req, res) {
 
 //status deactivated
 app.put("/companies/:_id", function(req, res) {
-    // var email = req.params.email;
-    console.log("in connect for deactivate put ");
-    console.log("id=" + req.params._id);
+            // var email = req.params.email;
+            console.log("in connect for deactivate put ");
+            console.log("id=" + req.params._id);
 
-    Company.find({ _id: req.params._id }, function(err, data) {
-        if (data == null) {
-            res.send(" id not exist");
-        } else {
-            Company.update({ _id: req.params._id }, { $set: { "companyInfo.status": "deactivated" } }, function(err, data) {
-                if (data.length === 0) {
-                    console.log("not updated");
-                    res.send("not updated");
+            Company.find({ _id: req.params._id }, function(err, data) {
+                if (data == null) {
+                    res.send(" id not exist");
                 } else {
-                    res.send("updated");
+                    Company.update({ _id: req.params._id }, { $set: { "companyInfo.status": "deactivated" } }, function(err, data) {
+                        if (data.length === 0) {
+                            console.log("not updated");
+                            res.send("not updated");
+                        } else {
+                            res.send("updated");
+                        }
+                    })
+
                 }
             })
 
-        }
-    })
+            //status activated
+            app.put("/companiess/:_id", function(req, res) {
+                // var email = req.params.email;
+                console.log("in connect for deactivate put ");
+                console.log("id=" + req.params._id);
 
-})
+                Company.find({ _id: req.params._id }, function(err, data) {
+                    if (data == null) {
+                        res.send(" id not exist");
+                    } else {
+                        Company.update({ _id: req.params._id }, { $set: { "companyInfo.status": "activated" } }, function(err, data) {
+                            if (data.length === 0) {
+                                console.log("not updated");
+                                res.send("not updated");
+                            } else {
+                                res.send("updated");
+                            }
+                        })
+                    }
+                })
+            });
 
-//status activated
-app.put("/companiess/:_id", function(req, res) {
-    // var email = req.params.email;
-    console.log("in connect for deactivate put ");
-    console.log("id=" + req.params._id);
+            app.get("/company/:id", function(req, res) {
+                var id = req.params.id;
+                console.log("inside connect.js cmp app for edit" + id)
+                Company.find({ "_id": req.params.id }, function(err, docs) {
+                    console.log("data=" + docs);
+                    res.send(docs);
+                });
+            });
 
-    Company.find({ _id: req.params._id }, function(err, data) {
-        if (data == null) {
-            res.send(" id not exist");
-        } else {
-            Company.update({ _id: req.params._id }, { $set: { "companyInfo.status": "activated" } }, function(err, data) {
-                if (data.length === 0) {
-                    console.log("not updated");
-                    res.send("not updated");
-                } else {
-                    res.send("updated");
-                }
+            app.put('/company/:id', function(req, res) {
+                console.log("in connect for update=");
+                let id = req.params.id;
+                var company = req.body;
+                console.log("cmp=" + company);
+                console.log("id=" + id);
+                async.series([
+                        function(callback) {
+                            Company.find({ '_id': req.params.id },
+                                function(err, docs) {
+                                    console.log(docs);
+                                    if (docs.length > 0) {
+                                        callback()
+                                    } else {
+                                        callback('Data not found to Update');
+                                    }
+                                })
+                        },
+                        function(callback) {
+                            Company.update({ '_id': req.params.id }, { '$set': { companyName: req.body.companyName, "companyInfo.Fax": req.body.companyInfo.Fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, } },
+                                function(err) {
+                                    if (err) {
+                                        console.log(err);
+                                        return;
+                                    } else {
+                                        callback()
+                                    }
+                                })
+                        },
+                        function(callback) {
+                            Company.find({ '_id': id },
+                                function(err, docs) {
+                                    if (err) {
+                                        console.log(err);
+                                        return;
+                                    } else {
+                                        callback(null, docs)
+                                    }
+                                })
+                        },
+
+                    ],
+                    function(error, data) {
+                        if (error) {
+                            res.send(error);
+                        } else {
+                            res.send(data);
+                        }
+                    })
             })
-        }
-    })
-});
 
-app.get("/company/:id", function(req, res) {
-    var id = req.params.id;
-    console.log("inside connect.js cmp app for edit" + id)
-    Company.find({ "_id": req.params.id }, function(err, docs) {
-        console.log("data=" + docs);
-        res.send(docs);
-    });
-});
-
-app.put('/company/:id', function(req, res) {
-    console.log("in connect for update=");
-    let id = req.params.id;
-    var company = req.body;
-    console.log("cmp=" + company);
-    console.log("id=" + id);
-    async.series([
-            function(callback) {
-                Company.find({ '_id': req.params.id },
-                    function(err, docs) {
-                        console.log(docs);
-                        if (docs.length > 0) {
-                            callback()
-                        } else {
-                            callback('Data not found to Update');
-                        }
-                    })
-            },
-            function(callback) {
-                Company.update({ '_id': req.params.id }, { '$set': { companyName: req.body.companyName, "companyInfo.Fax": req.body.companyInfo.Fax, "companyInfo.RegistartionNo": req.body.companyInfo.RegistartionNo, } },
-                    function(err) {
-                        if (err) {
-                            console.log(err);
-                            return;
-                        } else {
-                            callback()
-                        }
-                    })
-            },
-            function(callback) {
-                Company.find({ '_id': id },
-                    function(err, docs) {
-                        if (err) {
-                            console.log(err);
-                            return;
-                        } else {
-                            callback(null, docs)
-                        }
-                    })
-            },
-
-        ],
-        function(error, data) {
-            if (error) {
-                res.send(error);
-            } else {
-                res.send(data);
-            }
-        })
-})
-
-app.listen(3000, () => console.log('Listening on port 3000'));
+            app.listen(3000, () => console.log('Listening on port 3000'));
